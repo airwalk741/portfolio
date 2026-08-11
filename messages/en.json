@@ -1,0 +1,70 @@
+{
+  "Metadata": {
+    "title": "Developer Portfolio",
+    "description": "Frontend / Full-stack developer portfolio"
+  },
+  "Nav": {
+    "home": "Home",
+    "projects": "Projects"
+  },
+  "Theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "Home": {
+    "intro": {
+      "eyebrow": "Frontend Developer",
+      "cta": "View Projects"
+    },
+    "skills": {
+      "title": "Skills"
+    },
+    "career": {
+      "title": "Career",
+      "viewProject": "View project details"
+    },
+    "education": {
+      "title": "Education"
+    },
+    "certificates": {
+      "title": "Certificates"
+    },
+    "experience": {
+      "title": "Experience",
+      "types": {
+        "award": "Award",
+        "talk": "Talk",
+        "opensource": "Open Source",
+        "community": "Community",
+        "etc": "Other"
+      }
+    }
+  },
+  "Projects": {
+    "title": "Projects",
+    "description": "A collection of projects I've worked on, both at companies and on my own.",
+    "empty": "No projects in this category yet.",
+    "filters": {
+      "all": "All",
+      "company": "Company",
+      "toy": "Side Projects"
+    },
+    "detail": {
+      "period": "Period",
+      "team": "Team Size",
+      "teamValue": "{count, plural, one {# person} other {# people}}",
+      "category": "Type",
+      "overview": "Overview",
+      "stack": "Tech Stack",
+      "myRole": "My Role",
+      "features": "Key Features",
+      "challenges": "Challenges",
+      "improvements": "Improvements & Learnings",
+      "links": "Links",
+      "demo": "Live demo",
+      "repo": "Repository",
+      "back": "Back to list"
+    }
+  }
+}

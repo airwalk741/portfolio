@@ -1,0 +1,70 @@
+{
+  "Metadata": {
+    "title": "개발자 포트폴리오",
+    "description": "프론트엔드/풀스택 개발자 포트폴리오"
+  },
+  "Nav": {
+    "home": "홈",
+    "projects": "프로젝트"
+  },
+  "Theme": {
+    "light": "라이트",
+    "dark": "다크",
+    "system": "시스템"
+  },
+  "Home": {
+    "intro": {
+      "eyebrow": "Frontend Developer",
+      "cta": "프로젝트 보기"
+    },
+    "skills": {
+      "title": "스킬"
+    },
+    "career": {
+      "title": "커리어",
+      "viewProject": "프로젝트 자세히 보기"
+    },
+    "education": {
+      "title": "학력"
+    },
+    "certificates": {
+      "title": "자격증"
+    },
+    "experience": {
+      "title": "경험",
+      "types": {
+        "award": "수상",
+        "talk": "발표",
+        "opensource": "오픈소스",
+        "community": "커뮤니티",
+        "etc": "기타"
+      }
+    }
+  },
+  "Projects": {
+    "title": "프로젝트",
+    "description": "회사에서 진행한 프로젝트와 개인적으로 만든 토이 프로젝트를 소개합니다.",
+    "empty": "해당하는 프로젝트가 없습니다.",
+    "filters": {
+      "all": "전체",
+      "company": "회사 프로젝트",
+      "toy": "토이 프로젝트"
+    },
+    "detail": {
+      "period": "기간",
+      "team": "참여 인원",
+      "teamValue": "{count}명",
+      "category": "구분",
+      "overview": "프로젝트 개요",
+      "stack": "기술 스택",
+      "myRole": "나의 역할",
+      "features": "핵심 기능",
+      "challenges": "어려웠던 점",
+      "improvements": "개선한 점 / 배운 점",
+      "links": "링크",
+      "demo": "데모 보기",
+      "repo": "저장소",
+      "back": "목록으로"
+    }
+  }
+}
