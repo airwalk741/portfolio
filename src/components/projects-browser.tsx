@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { useTranslations } from "next-intl";
@@ -9,15 +9,20 @@ import { Link } from "@/i18n/navigation";
 import type { ProjectCategory } from "@/data/projects";
 
 /**
- * Locale-resolved, fully serializable card data. Localization happens on the
- * server so the client bundle never receives the ko + en copy of every field.
+ * Locale-resolved card data. Localization happens on the server so the client
+ * bundle never receives the ko + en copy of every field.
+ *
+ * `stack` arrives as an already-rendered node rather than `string[]`: rendering
+ * `<TechBadge>` here would pull the whole `@/lib/tech-icons` table (~85 brand
+ * SVGs) into this client chunk. Rendering it on the server keeps the icons in
+ * the static HTML / RSC payload and out of the JS bundle.
  */
 export type ProjectCardData = {
   slug: string;
   title: string;
   summary: string;
   period: string;
-  stack: string[];
+  stack: ReactNode;
   category: ProjectCategory;
   thumbnail: string;
 };
@@ -74,9 +79,9 @@ export function ProjectsBrowser({ projects }: { projects: ProjectCardData[] }) {
               onClick={() => setFilter(value)}
               aria-pressed={active}
               className={[
-                "text-caption rounded-full border px-4 py-2 font-medium transition-colors",
+                "text-caption rounded-button border px-4 py-2 font-medium transition-colors",
                 active
-                  ? "border-primary bg-primary text-white"
+                  ? "border-primary bg-primary text-primary-foreground"
                   : "border-border text-muted-foreground hover:border-primary hover:text-primary",
               ].join(" ")}
             >
@@ -105,7 +110,7 @@ export function ProjectsBrowser({ projects }: { projects: ProjectCardData[] }) {
             >
               <Link
                 href={`/projects/${project.slug}`}
-                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-shadow hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                className="group flex h-full flex-col overflow-hidden rounded-card border border-border bg-surface shadow-card transition-shadow hover:shadow-card-hover"
               >
                 <div className="relative aspect-video overflow-hidden bg-primary-tint">
                   <Image
@@ -128,16 +133,7 @@ export function ProjectsBrowser({ projects }: { projects: ProjectCardData[] }) {
                   <p className="text-body mt-2 line-clamp-3 flex-1 text-muted-foreground">
                     {project.summary}
                   </p>
-                  <ul className="mt-4 flex flex-wrap gap-2">
-                    {project.stack.slice(0, 5).map((tech) => (
-                      <li
-                        key={tech}
-                        className="text-caption rounded-full bg-primary-tint px-3 py-1 font-medium text-primary"
-                      >
-                        {tech}
-                      </li>
-                    ))}
-                  </ul>
+                  <ul className="mt-4 flex flex-wrap gap-2">{project.stack}</ul>
                 </div>
               </Link>
             </motion.li>

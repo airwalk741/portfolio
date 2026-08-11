@@ -6,6 +6,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Reveal } from "@/components/reveal";
 import { Link } from "@/i18n/navigation";
+import { TechBadge } from "@/components/tech-badge";
 import { routing } from "@/i18n/routing";
 import { getProjectBySlug, projects } from "@/data/projects";
 import { formatPeriod } from "@/data/types";
@@ -84,7 +85,7 @@ export default async function ProjectDetailPage({
           {project.title[locale]}
         </h1>
 
-        <dl className="mt-8 grid grid-cols-1 gap-4 rounded-2xl bg-surface p-6 sm:grid-cols-3">
+        <dl className="mt-8 grid grid-cols-1 gap-4 rounded-card bg-surface p-6 sm:grid-cols-3">
           {meta.map((item) => (
             <div key={item.label}>
               <dt className="text-caption font-medium text-muted-foreground">
@@ -98,7 +99,7 @@ export default async function ProjectDetailPage({
         </dl>
       </Reveal>
 
-      <Reveal className="relative mt-10 aspect-video overflow-hidden rounded-2xl bg-primary-tint">
+      <Reveal className="relative mt-10 aspect-video overflow-hidden rounded-modal bg-primary-tint">
         <Image
           src={project.thumbnail}
           alt={project.title[locale]}
@@ -120,11 +121,8 @@ export default async function ProjectDetailPage({
       <DetailSection title={t("detail.stack")}>
         <ul className="flex flex-wrap gap-2">
           {project.stack.map((tech) => (
-            <li
-              key={tech}
-              className="text-caption rounded-full bg-primary-tint px-3 py-1 font-medium text-primary"
-            >
-              {tech}
+            <li key={tech}>
+              <TechBadge name={tech} />
             </li>
           ))}
         </ul>
@@ -166,7 +164,7 @@ export default async function ProjectDetailPage({
             {project.images.map((image) => (
               <li
                 key={image}
-                className="relative aspect-video overflow-hidden rounded-2xl bg-primary-tint"
+                className="relative aspect-video overflow-hidden rounded-modal bg-primary-tint"
               >
                 <Image
                   src={image}
@@ -190,7 +188,7 @@ export default async function ProjectDetailPage({
                   href={project.links.demo}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-body inline-flex items-center rounded-full bg-primary px-5 py-2.5 font-semibold text-white transition-transform hover:scale-[1.02] motion-reduce:transform-none"
+                  className="text-body inline-flex items-center rounded-button bg-primary px-5 py-2.5 font-semibold text-primary-foreground shadow-primary transition-transform hover:scale-[1.02] motion-reduce:transform-none"
                 >
                   {t("detail.demo")}
                 </a>
@@ -202,7 +200,7 @@ export default async function ProjectDetailPage({
                   href={project.links.repo}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-body inline-flex items-center rounded-full border border-border px-5 py-2.5 font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
+                  className="text-body inline-flex items-center rounded-button border border-border px-5 py-2.5 font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
                 >
                   {t("detail.repo")}
                 </a>

@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Reveal, RevealItem } from "@/components/reveal";
 import { Section } from "@/components/section";
+import { TechBadge } from "@/components/tech-badge";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { careers } from "@/data/careers";
@@ -62,7 +63,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           <RevealItem as="div" className="mt-10 flex flex-wrap gap-3">
             <Link
               href="/projects"
-              className="text-body inline-flex items-center rounded-full bg-primary px-6 py-3 font-semibold text-white transition-transform hover:scale-[1.02] motion-reduce:transform-none"
+              className="text-body inline-flex items-center rounded-button bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-primary transition-transform hover:scale-[1.02] motion-reduce:transform-none"
             >
               {t("intro.cta")}
             </Link>
@@ -76,7 +77,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
                     ? "noopener noreferrer"
                     : undefined
                 }
-                className="text-body inline-flex items-center rounded-full border border-border px-6 py-3 font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
+                className="text-body inline-flex items-center rounded-button border border-border px-6 py-3 font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
               >
                 {social.label}
               </a>
@@ -89,20 +90,14 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       <Section id="skills" title={t("skills.title")}>
         <Reveal stagger className="grid gap-4 sm:grid-cols-2">
           {skillCategories.map((category) => (
-            <RevealItem
-              key={category.id}
-              className="rounded-2xl bg-surface p-6"
-            >
+            <RevealItem key={category.id} className="rounded-card bg-surface p-6">
               <h3 className="text-h3 font-semibold text-foreground">
                 {category.label[locale]}
               </h3>
               <ul className="mt-4 flex flex-wrap gap-2">
                 {category.items.map((item) => (
-                  <li
-                    key={item}
-                    className="text-caption rounded-full bg-primary-tint px-3 py-1 font-medium text-primary"
-                  >
-                    {item}
+                  <li key={item.name}>
+                    <TechBadge name={item.name} icon={item.icon} />
                   </li>
                 ))}
               </ul>
@@ -155,7 +150,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             <RevealItem
               key={education.id}
               as="li"
-              className="rounded-2xl bg-surface p-6"
+              className="rounded-card bg-surface p-6"
             >
               <p className="text-caption font-medium text-muted-foreground">
                 {formatPeriod(education.period, locale)}
@@ -184,7 +179,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             <RevealItem
               key={certificate.id}
               as="li"
-              className="flex flex-wrap items-baseline justify-between gap-2 rounded-2xl bg-surface px-6 py-4"
+              className="flex flex-wrap items-baseline justify-between gap-2 rounded-card bg-surface px-6 py-4"
             >
               <div>
                 <h3 className="text-h3 font-semibold text-foreground">
@@ -220,7 +215,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             <RevealItem
               key={experience.id}
               as="li"
-              className="rounded-2xl bg-surface p-6"
+              className="rounded-card bg-surface p-6"
             >
               <div className="flex flex-wrap items-center gap-3">
                 <span className="text-caption rounded-full bg-primary-tint px-3 py-1 font-medium text-primary">

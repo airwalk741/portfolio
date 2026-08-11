@@ -8,6 +8,7 @@ import {
   ProjectsBrowser,
   type ProjectCardData,
 } from "@/components/projects-browser";
+import { TechBadge } from "@/components/tech-badge";
 import { routing } from "@/i18n/routing";
 import { projects } from "@/data/projects";
 import { formatPeriod } from "@/data/types";
@@ -46,7 +47,13 @@ export default async function ProjectsPage({
     title: project.title[locale],
     summary: project.summary[locale],
     period: formatPeriod(project.period, locale),
-    stack: project.stack,
+    // Rendered here (server) so the brand icon table stays out of the client
+    // bundle — see the note on `ProjectCardData`.
+    stack: project.stack.slice(0, 5).map((tech) => (
+      <li key={tech}>
+        <TechBadge name={tech} />
+      </li>
+    )),
     category: project.category,
     thumbnail: project.thumbnail,
   }));
