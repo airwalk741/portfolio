@@ -17,28 +17,23 @@ export type Profile = {
   socials: SocialLink[];
 };
 
-/** TODO(content): replace with real profile copy from docs/. */
 export const profile: Profile = {
   name: {
-    ko: "홍길동",
-    en: "Gildong Hong",
+    ko: "박상현",
+    en: "Park Sang-Hyun",
   },
   headline: {
-    ko: "제품의 첫인상을 만드는 프론트엔드 개발자",
-    en: "Frontend Developer crafting first impressions",
+    ko: "실시간 데이터를 다루는 프론트엔드 개발자",
+    en: "Frontend Developer working with real-time data",
   },
   bio: {
-    ko: "사용자가 화면을 마주하는 첫 순간을 가장 중요하게 생각하는 프론트엔드 개발자입니다. React와 TypeScript를 중심으로 웹 서비스를 만들며, 재사용 가능한 컴포넌트 설계와 렌더링 성능 최적화에 관심이 많습니다. 디자이너·백엔드 개발자와 적극적으로 소통하며 요구사항의 배경까지 이해한 뒤 구현하는 방식을 선호합니다. 앞으로는 접근성과 성능을 기본값으로 챙기는 제품을 만들고 싶습니다.",
-    en: "I'm a frontend developer who cares most about the very first moment a user meets a screen. I build web services with React and TypeScript, with a focus on reusable component design and rendering performance. I like to understand the reasoning behind a requirement — talking it through with designers and backend engineers — before I start implementing. Going forward, I want to build products where accessibility and performance are the default, not an afterthought.",
+    ko: "2021년부터 실시간 관제 웹을 만들어 온 프론트엔드 개발자입니다. 스마트 팩토리 대시보드, IP 카메라에 직접 탑재되는 임베디드 웹처럼 MQTT·WebSocket·RTSP로 들어오는 데이터를 Canvas와 차트로 렌더링하는 일을 주로 해왔습니다. 24시간 켜두는 관제 화면의 메모리 누수를 추적해 해결하고, 기기 스토리지 제약에 맞춰 빌드 용량을 60MB에서 12MB로 줄이는 등 제약 조건 안에서 답을 찾는 데 익숙합니다. 필요하면 프론트엔드 밖으로도 나갑니다 — Node.js와 Go로 서버를 직접 만들고, Docker로 배포한 서비스를 지금도 운영하고 있습니다. 구조가 병목이라고 판단되면 미루지 않습니다. Vue 3 생태계의 한계로 일정이 밀리던 프로젝트에서 React 전환을 제안하고 직접 주도했습니다.",
+    en: "I've been building real-time monitoring interfaces since 2021 — smart factory dashboards, and embedded control pages that ship inside IP cameras. Most of my work is about pulling data in over MQTT, WebSocket and RTSP and rendering it with Canvas and charts, usually under hard constraints: tracking down a memory leak in a dashboard that has to stay open 24/7, or cutting a build from 60MB to 12MB so it fits on device storage. I also step outside the frontend when it helps — I write servers in Node.js and Go, and I still operate a service I deployed with Docker. And I don't sit on structural problems: when the Vue 3 ecosystem became the bottleneck on a project, I proposed the migration to React and led it myself.",
   },
-  email: "hello@example.com",
+  // Email is intentionally not published — GitHub is the only public contact.
+  email: "",
   socials: [
-    { id: "github", label: "GitHub", href: "https://github.com/example" },
-    {
-      id: "linkedin",
-      label: "LinkedIn",
-      href: "https://www.linkedin.com/in/example",
-    },
-    { id: "email", label: "Email", href: "mailto:hello@example.com" },
+    // TODO(content): 실제 GitHub URL로 교체
+    { id: "github", label: "GitHub", href: "https://github.com/TODO" },
   ],
 };

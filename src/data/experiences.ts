@@ -18,35 +18,41 @@ export type Experience = {
   link?: string;
 };
 
-/** TODO(content): replace with real awards / talks / OSS contributions. */
+// NOTE(content): docs/ 원본에는 수상/발표/오픈소스 이력이 명시되어 있지 않아,
+// 문서로 확인 가능한 인증·시험 통과 실적(Plandy)만 담았습니다.
+// 실제 수상·컨퍼런스 발표·오픈소스 기여 이력이 있다면 확인 후 추가해 주세요.
+// 두 항목 모두 취득 시점이 원본에 없어 Plandy 프로젝트 종료 시점(2023.06)을
+// 기준으로 추정했습니다 — 정확한 날짜 확인 후 교체 필요.
 export const experiences: Experience[] = [
   {
-    id: "frontend-conf-talk",
-    type: "talk",
+    id: "gs-certification-plandy",
+    type: "award",
     title: {
-      ko: "대규모 테이블 렌더링 최적화 사례 발표",
-      en: "Talk: Optimizing Large Table Rendering",
+      ko: "GS 인증 1등급 획득 — 보급형 CPS 플랫폼 Plandy",
+      en: "GS Certification Grade 1 — Plandy CPS Platform",
     },
-    organization: { ko: "사내 프론트엔드 세미나", en: "Internal FE Seminar" },
-    period: { start: "2025-05" },
+    organization: {
+      ko: "한국정보통신기술협회(TTA)",
+      en: "Telecommunications Technology Association (TTA)",
+    },
+    period: { start: "2023-06" },
     description: {
-      ko: "가상 스크롤 도입 전후의 프로파일링 결과를 공유하고, 팀 내 렌더링 최적화 체크리스트를 만들었습니다.",
-      en: "Shared before/after profiling results of introducing virtualization and turned them into a team-wide rendering checklist.",
+      ko: "프론트엔드 단독 담당자로 인증 프로세스에 참여했습니다. 인증 요구사항에 맞춰 인증·권한 처리를 재설계하고 보안 취약점을 사전 점검해, 소프트웨어 품질 인증인 GS 1등급을 획득했습니다.",
+      en: "Took part in the certification process as the sole frontend owner — reworking the authentication and permission flow to meet the requirements and auditing security issues up front. The platform passed with Grade 1, Korea's software quality certification.",
     },
   },
   {
-    id: "oss-contribution",
-    type: "opensource",
+    id: "ktr-software-test-plandy",
+    type: "etc",
     title: {
-      ko: "오픈소스 기여 — 타입 정의 및 문서 개선",
-      en: "Open Source — type definitions & docs",
+      ko: "KTR 소프트웨어 시험 통과 — 공정 조건 최적화 알고리즘",
+      en: "KTR Software Test Passed — Process Optimization Algorithm",
     },
-    organization: { ko: "커뮤니티 라이브러리", en: "Community library" },
-    period: { start: "2024-08" },
+    organization: { ko: "한국화학융합시험연구원(KTR)", en: "KTR" },
+    period: { start: "2023-06" },
     description: {
-      ko: "제네릭 추론이 깨지던 훅의 타입 시그니처를 수정하고 사용 예제를 문서에 추가했습니다.",
-      en: "Fixed a hook signature that broke generic inference and added usage examples to the docs.",
+      ko: "DFS 기반 공정 조건 최적화 알고리즘을 직접 설계·구현해 공인 시험기관의 소프트웨어 시험을 통과했습니다.",
+      en: "Designed and implemented a DFS-based process optimization algorithm that passed an accredited software test.",
     },
-    link: "https://github.com/example/pull/1",
   },
 ];

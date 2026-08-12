@@ -21,7 +21,12 @@ export type SkillCategory = {
   items: Skill[];
 };
 
-/** TODO(content): replace with the real skill inventory. */
+// NOTE(content): docs/projects/projects.md 의 "Tech Stacks" 4분류를 기준으로,
+// 각 프로젝트 상세 문서에서 실제로 사용한 기술(Vite, Recoil, Chart.js, Sequelize,
+// ffmpeg, Electron, Zustand 등)을 합쳐 5개 카테고리로 재정리했습니다.
+// "Protocols & Integrations"는 이 이력의 차별점이라 별도 카테고리로 분리했습니다.
+// 브랜드 아이콘이 없는 항목(Recoil, Zustand, Chart.js, Nuxt.js, Django, ffmpeg 등)은
+// `@/lib/tech-icons` 의 기본 코드 글리프로 폴백됩니다.
 export const skillCategories: SkillCategory[] = [
   {
     id: "frontend",
@@ -31,11 +36,17 @@ export const skillCategories: SkillCategory[] = [
       { name: "JavaScript" },
       { name: "React" },
       { name: "Next.js" },
-      { name: "Tailwind CSS" },
-      { name: "Framer Motion" },
-      { name: "TanStack Query" },
-      // No brand mark in Simple Icons — falls back to the generic code glyph.
+      { name: "Vue.js" },
+      { name: "Nuxt.js" },
+      { name: "Redux" },
+      { name: "Recoil" },
       { name: "Zustand" },
+      { name: "TanStack Query" },
+      { name: "Tailwind CSS" },
+      { name: "Sass" },
+      { name: "Chart.js" },
+      { name: "Vite" },
+      { name: "Electron" },
     ],
   },
   {
@@ -44,20 +55,34 @@ export const skillCategories: SkillCategory[] = [
     items: [
       { name: "Node.js" },
       { name: "Express" },
-      { name: "NestJS" },
-      { name: "PostgreSQL" },
-      { name: "Prisma" },
+      { name: "Go" },
+      { name: "Django" },
+      { name: "Sequelize" },
       { name: "REST API" },
     ],
   },
   {
     id: "infra",
-    label: { ko: "인프라 · 툴", en: "Infra & Tools" },
+    label: { ko: "데이터 · 인프라", en: "Data & Infra" },
     items: [
-      { name: "Vercel" },
-      { name: "AWS" },
+      { name: "MySQL" },
+      { name: "MariaDB" },
       { name: "Docker" },
-      { name: "GitHub Actions" },
+      { name: "Nginx" },
+      { name: "Apache" },
+      { name: "Ubuntu" },
+    ],
+  },
+  {
+    id: "integration",
+    label: { ko: "실시간 · 연동", en: "Real-time & Integrations" },
+    items: [
+      { name: "MQTT" },
+      { name: "WebSocket" },
+      { name: "RTSP" },
+      { name: "Canvas API" },
+      { name: "ffmpeg" },
+      { name: "Microsoft Graph API" },
     ],
   },
   {
@@ -66,8 +91,6 @@ export const skillCategories: SkillCategory[] = [
     items: [
       { name: "Git" },
       { name: "GitHub" },
-      { name: "Jira" },
-      { name: "Figma" },
       { name: "Slack" },
       { name: "Notion" },
     ],
