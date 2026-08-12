@@ -48,18 +48,6 @@
       "company": "Company",
       "toy": "Side Project"
     },
-    "groups": {
-      "company": {
-        "eyebrow": "Chapter 01 · Company",
-        "title": "Company Work",
-        "note": "Shipped with a team"
-      },
-      "toy": {
-        "eyebrow": "Chapter 02 · Personal",
-        "title": "Side Projects",
-        "note": "Built out of curiosity"
-      }
-    },
     "detail": {
       "period": "Period",
       "team": "Team Size",

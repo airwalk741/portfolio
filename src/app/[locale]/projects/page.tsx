@@ -8,11 +8,7 @@ import { TechBadge } from "@/components/tech-badge";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import type { Locale } from "@/i18n/routing";
-import {
-  getProjectsByCategory,
-  type Project,
-  type ProjectCategory,
-} from "@/data/projects";
+import { projects, type Project } from "@/data/projects";
 import { formatPeriod } from "@/data/types";
 
 export function generateStaticParams() {
@@ -31,6 +27,18 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * Most recent first. Ongoing projects (no `end`) rank above finished ones,
+ * since "still active" reads as more current than "wrapped up a while ago"
+ * even if the wrap-up date is later on the calendar. Ties break on `start`.
+ */
+function byRecency(a: Project, b: Project) {
+  const aEnd = a.period.end ?? "9999-99";
+  const bEnd = b.period.end ?? "9999-99";
+  if (aEnd !== bEnd) return aEnd < bEnd ? 1 : -1;
+  return a.period.start < b.period.start ? 1 : -1;
+}
+
 export default async function ProjectsPage({
   params,
 }: PageProps<"/[locale]/projects">) {
@@ -43,8 +51,7 @@ export default async function ProjectsPage({
   setRequestLocale(locale);
 
   const t = await getTranslations("Projects");
-  const company = getProjectsByCategory("company");
-  const toy = getProjectsByCategory("toy");
+  const ordered = [...projects].sort(byRecency);
 
   return (
     <div className="mx-auto w-full max-w-4xl px-6 py-16 md:px-10 md:py-24">
@@ -57,86 +64,19 @@ export default async function ProjectsPage({
         </p>
       </Reveal>
 
-      <Chapter
-        eyebrow={t("groups.company.eyebrow")}
-        title={t("groups.company.title")}
-        note={t("groups.company.note")}
-        tone="company"
-        projects={company}
-        locale={locale}
-      />
-
-      <Chapter
-        eyebrow={t("groups.toy.eyebrow")}
-        title={t("groups.toy.title")}
-        note={t("groups.toy.note")}
-        tone="toy"
-        projects={toy}
-        locale={locale}
-      />
-    </div>
-  );
-}
-
-function Chapter({
-  eyebrow,
-  title,
-  note,
-  tone,
-  projects,
-  locale,
-}: {
-  eyebrow: string;
-  title: string;
-  note: string;
-  tone: ProjectCategory;
-  projects: Project[];
-  locale: Locale;
-}) {
-  const company = tone === "company";
-
-  return (
-    <section className="mt-16 md:mt-24">
-      <Reveal
-        className={[
-          "flex flex-wrap items-end justify-between gap-x-6 gap-y-2 pb-4",
-          company
-            ? "border-b-2 border-foreground"
-            : "border-b border-dashed border-border-strong",
-        ].join(" ")}
-      >
-        <div>
-          <p className="text-label font-bold tracking-[0.18em] text-primary uppercase">
-            {eyebrow}
-          </p>
-          <h2
-            className={[
-              "mt-2 font-bold tracking-tight text-foreground",
-              company ? "text-h1" : "text-h2",
-            ].join(" ")}
-          >
-            {title}
-          </h2>
-        </div>
-        <p className="text-caption pb-1 text-muted-foreground">
-          {note}
-          <span className="mx-2 opacity-40" aria-hidden="true">
-            /
-          </span>
-          <span className="font-semibold tabular-nums text-foreground">
-            {String(projects.length).padStart(2, "0")}
-          </span>
-        </p>
-      </Reveal>
-
-      <Reveal stagger as="ul">
-        {projects.map((project, index) => (
+      <Reveal stagger as="ul" className="mt-12 md:mt-16">
+        {ordered.map((project, index) => (
           <RevealItem key={project.slug} as="li" className="border-b border-border">
-            <Row project={project} locale={locale} index={index + 1} tone={tone} />
+            <Row
+              project={project}
+              locale={locale}
+              index={index + 1}
+              categoryLabel={t(`category.${project.category}`)}
+            />
           </RevealItem>
         ))}
       </Reveal>
-    </section>
+    </div>
   );
 }
 
@@ -144,14 +84,13 @@ function Row({
   project,
   locale,
   index,
-  tone,
+  categoryLabel,
 }: {
   project: Project;
   locale: Locale;
   index: number;
-  tone: ProjectCategory;
+  categoryLabel: string;
 }) {
-  const company = tone === "company";
   const period = formatPeriod(project.period, locale);
 
   return (
@@ -164,12 +103,10 @@ function Row({
       </span>
 
       <div className="min-w-0">
-        <h3
-          className={[
-            "font-bold tracking-tight text-foreground hover:text-primary",
-            company ? "text-h2" : "text-h3",
-          ].join(" ")}
-        >
+        <p className="text-caption font-semibold tracking-[0.14em] text-primary uppercase">
+          {categoryLabel}
+        </p>
+        <h3 className="text-h2 mt-1 font-bold tracking-tight text-foreground hover:text-primary">
           {project.title[locale]}
         </h3>
 
@@ -178,7 +115,7 @@ function Row({
         </p>
 
         <ul className="mt-4 flex flex-wrap gap-1.5">
-          {project.stack.slice(0, company ? 5 : 4).map((tech) => (
+          {project.stack.slice(0, 5).map((tech) => (
             <li key={tech}>
               <TechBadge name={tech} />
             </li>

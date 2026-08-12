@@ -48,18 +48,6 @@
       "company": "회사 프로젝트",
       "toy": "토이 프로젝트"
     },
-    "groups": {
-      "company": {
-        "eyebrow": "Chapter 01 · Company",
-        "title": "회사 프로젝트",
-        "note": "실무에서 팀과 함께"
-      },
-      "toy": {
-        "eyebrow": "Chapter 02 · Personal",
-        "title": "토이 프로젝트",
-        "note": "개인적인 호기심에서"
-      }
-    },
     "detail": {
       "period": "기간",
       "team": "참여 인원",
