@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -47,14 +48,16 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             as="div"
             className="mt-3 flex flex-col items-start gap-5 sm:flex-row sm:items-center"
           >
-            {/* Placeholder photo slot — replace public/profile/avatar.svg with a real photo. */}
-            <img
-              src={profile.avatar}
-              alt=""
-              width={96}
-              height={96}
-              className="size-20 shrink-0 rounded-full border border-border object-cover sm:size-24"
-            />
+            <div className="relative size-20 shrink-0 overflow-hidden rounded-full border border-border sm:size-24">
+              <Image
+                src={profile.avatar}
+                alt={profile.name[locale]}
+                fill
+                sizes="96px"
+                priority
+                className="object-cover"
+              />
+            </div>
             <div>
               <h1
                 id="intro-heading"

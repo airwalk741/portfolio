@@ -13,12 +13,7 @@ export type Profile = {
   headline: LocalizedText;
   /** Intro paragraphs rendered in the Home intro section, one `<p>` per entry. */
   bio: LocalizedList;
-  /**
-   * Public path to the profile photo shown next to the name in the intro
-   * section. Currently a placeholder graphic; swap the file at this path
-   * (keep the same filename, or update this field) once a real photo is
-   * ready.
-   */
+  /** Public path to the profile photo shown next to the name in the intro section. */
   avatar: string;
   email: string;
   socials: SocialLink[];
@@ -47,7 +42,7 @@ export const profile: Profile = {
       "I also keep my side projects running instead of shipping and walking away, so the tutoring notes service I built in 2024 is still one I operate myself.",
     ],
   },
-  avatar: "/profile/avatar.svg",
+  avatar: "/profile/me.jpg",
   // Email is intentionally not published; GitHub is the only public contact.
   email: "",
   socials: [
