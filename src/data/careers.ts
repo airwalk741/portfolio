@@ -46,7 +46,7 @@ export const careers: Career[] = [
       ],
       en: [
         "Owned the frontend of Plandy, a CPS monitoring platform, and drove its Vue 3 → React migration; the platform earned a GS Certification Grade 1.",
-        "Built IPC, an embedded web UI shipped inside IP cameras, as a solo full-stack developer — shrinking the build from 60MB to 12MB to fit on device.",
+        "Built IPC, an embedded web UI shipped inside IP cameras, as a solo full-stack developer, shrinking the build from 60MB to 12MB so it fit on the device.",
         "Fixed a Blob memory leak in TRUSafer, a fire-prediction monitoring dashboard, making 24/7 operation stable.",
       ],
     },

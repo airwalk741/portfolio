@@ -9,7 +9,7 @@ export type Certificate = {
   credentialUrl?: string;
 };
 
-// NOTE(content): 정확한 취득일 미상 — 추정값.
+// NOTE(content): 정확한 취득일 미상(추정값).
 // 원본(docs/projects/projects.md)에는 자격증명만 있고 취득일이 없습니다.
 // 두 자격증 모두 취업(2021.09) 이전에 취득한 것으로 보고,
 // - 정보처리기사: SSAFY 수료(2021.08) 시점 전후

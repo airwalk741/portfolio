@@ -15,7 +15,7 @@ export type SkillCategory = {
   id: string;
   label: LocalizedText;
   /**
-   * Proficiency levels are intentionally omitted (PRD 4.1 ②) — we list what we
+   * Proficiency levels are intentionally omitted (PRD 4.1 ②). We list what we
    * have actually used instead of a subjective score.
    */
   items: Skill[];
@@ -24,7 +24,7 @@ export type SkillCategory = {
 // NOTE(content): docs/projects/projects.md 의 "Tech Stacks" 4분류를 기준으로,
 // 각 프로젝트 상세 문서에서 실제로 사용한 기술(Vite, Recoil, Chart.js, Sequelize,
 // ffmpeg, Electron, Zustand 등)을 합쳐 5개 카테고리로 재정리했습니다.
-// "Protocols & Integrations"는 이 이력의 차별점이라 별도 카테고리로 분리했습니다.
+// "Protocols & Integrations"는 프레임워크와 성격이 달라 별도 카테고리로 분리했습니다.
 // 브랜드 아이콘이 없는 항목(Recoil, Zustand, Chart.js, Nuxt.js, Django, ffmpeg 등)은
 // `@/lib/tech-icons` 의 기본 코드 글리프로 폴백됩니다.
 export const skillCategories: SkillCategory[] = [
@@ -75,7 +75,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     id: "integration",
-    label: { ko: "실시간 · 연동", en: "Real-time & Integrations" },
+    label: { ko: "프로토콜 · 연동", en: "Protocols & Integrations" },
     items: [
       { name: "MQTT" },
       { name: "WebSocket" },
