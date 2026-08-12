@@ -25,8 +25,8 @@ export const profile: Profile = {
     en: "Park Sang-Hyun",
   },
   headline: {
-    ko: "만든 서비스를 끝까지 운영해 보는 프론트엔드 개발자",
-    en: "Frontend developer who builds products and keeps them running",
+    ko: "더 나은 서비스를 고민하는 프론트엔드 개발자",
+    en: "Frontend developer always thinking about how to make things better",
   },
   bio: {
     ko: [
