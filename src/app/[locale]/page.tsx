@@ -43,16 +43,29 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           <RevealItem as="p" className="text-caption font-medium text-primary">
             {t("intro.eyebrow")}
           </RevealItem>
-          <RevealItem as="div" className="mt-3">
-            <h1
-              id="intro-heading"
-              className="text-display font-bold tracking-tight text-foreground"
-            >
-              {profile.name[locale]}
-            </h1>
-            <p className="text-h2 mt-2 font-semibold text-muted-foreground">
-              {profile.headline[locale]}
-            </p>
+          <RevealItem
+            as="div"
+            className="mt-3 flex flex-col items-start gap-5 sm:flex-row sm:items-center"
+          >
+            {/* Placeholder photo slot — replace public/profile/avatar.svg with a real photo. */}
+            <img
+              src={profile.avatar}
+              alt=""
+              width={96}
+              height={96}
+              className="size-20 shrink-0 rounded-full border border-border object-cover sm:size-24"
+            />
+            <div>
+              <h1
+                id="intro-heading"
+                className="text-display font-bold tracking-tight text-foreground"
+              >
+                {profile.name[locale]}
+              </h1>
+              <p className="text-h2 mt-2 font-semibold text-muted-foreground">
+                {profile.headline[locale]}
+              </p>
+            </div>
           </RevealItem>
           <RevealItem
             as="p"
@@ -221,9 +234,11 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
                 <span className="text-caption rounded-full bg-primary-tint px-3 py-1 font-medium text-primary">
                   {t(`experience.types.${experience.type}`)}
                 </span>
-                <span className="text-caption font-medium text-muted-foreground">
-                  {formatPeriod(experience.period, locale)}
-                </span>
+                {experience.period ? (
+                  <span className="text-caption font-medium text-muted-foreground">
+                    {formatPeriod(experience.period, locale)}
+                  </span>
+                ) : null}
               </div>
               <h3 className="text-h3 mt-3 font-semibold text-foreground">
                 {experience.link ? (

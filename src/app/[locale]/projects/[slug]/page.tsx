@@ -63,7 +63,7 @@ export default async function ProjectDetailPage({
 
   const meta = [
     { label: t("detail.period"), value: formatPeriod(project.period, locale) },
-    { label: t("detail.category"), value: t(`filters.${project.category}`) },
+    { label: t("detail.category"), value: t(`category.${project.category}`) },
     {
       label: t("detail.team"),
       value: t("detail.teamValue", { count: project.teamSize }),

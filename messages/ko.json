@@ -44,11 +44,21 @@
   "Projects": {
     "title": "프로젝트",
     "description": "회사에서 진행한 프로젝트와 개인적으로 만든 토이 프로젝트를 소개합니다.",
-    "empty": "해당하는 프로젝트가 없습니다.",
-    "filters": {
-      "all": "전체",
+    "category": {
       "company": "회사 프로젝트",
       "toy": "토이 프로젝트"
+    },
+    "groups": {
+      "company": {
+        "eyebrow": "Chapter 01 · Company",
+        "title": "회사 프로젝트",
+        "note": "실무에서 팀과 함께"
+      },
+      "toy": {
+        "eyebrow": "Chapter 02 · Personal",
+        "title": "토이 프로젝트",
+        "note": "개인적인 호기심에서"
+      }
     },
     "detail": {
       "period": "기간",
