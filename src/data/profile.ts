@@ -46,7 +46,6 @@ export const profile: Profile = {
   // Email is intentionally not published; GitHub is the only public contact.
   email: "",
   socials: [
-    // TODO(content): 실제 GitHub URL로 교체
-    { id: "github", label: "GitHub", href: "https://github.com/TODO" },
+    { id: "github", label: "GitHub", href: "https://github.com/airwalk741" },
   ],
 };

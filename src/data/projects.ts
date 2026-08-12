@@ -39,10 +39,15 @@ export type Project = {
 // ⑤ m365works: 전용 상세 문서가 없어 projects.md 서술과 careers.ts highlights 를 근거로
 //    작성했습니다. 기간(2025.09~2026.02)은 projects.md 표기 그대로이며, 팀 규모는 명시가
 //    없어 "역할: 풀스택 개발" 서술에 따라 1인으로 두었습니다.
-// ⑥ make-pro: 원본(make_pro.md)에 기간이 없어, 사용 스택 버전(React 19 / Tailwind v4 /
-//    gemini-2.5-flash)을 근거로 2026.01 시작·진행 중으로 추정했습니다.
+// ⑥ make-pro: 실제 저장소(C:\Users\airwa\OneDrive\Desktop\code\make_pro)의 git 로그를
+//    확인해 2026.06.14 첫 커밋 ~ 2026.07.02 마지막 커밋(README 작성)으로 교체했습니다.
 // ⑦ links: 공개 데모/저장소가 확인되는 프로젝트가 없어 전부 생략했습니다.
-//    tutoring-notice 는 실서비스 중이지만 원본에 실제 도메인이 남아 있지 않아 제외.
+//    make-pro/tutoring-notice 는 실제 GitHub 저장소(비공개 추정)를 확인했지만, 공개
+//    링크로 걸어도 되는지 확인 전이라 우선 생략.
+// ⑧ tutoring-notice: 실제 저장소(...\code\poo-study-notes)의 git 로그·package.json·
+//    docker-compose.yaml을 확인해 기간을 2023.11(첫 커밋) 시작으로, 스택을 실제 구성
+//    (React+Recoil+TanStack Query 클라이언트, 초기 Express·Sequelize에서 NestJS·TypeORM
+//    으로 재작성된 서버, MariaDB, Nginx)으로 교체했습니다.
 
 /**
  * Company projects first (newest first), then personal projects (newest first).
@@ -281,7 +286,7 @@ export const projects: Project[] = [
       en: "Make Pro",
     },
     category: "toy",
-    period: { start: "2026-01" },
+    period: { start: "2026-06", end: "2026-07" },
     teamSize: 1,
     stack: [
       "Electron",
@@ -339,18 +344,18 @@ export const projects: Project[] = [
       en: "Tutoring Notes",
     },
     category: "toy",
-    period: { start: "2024-01" },
+    period: { start: "2023-11" },
     teamSize: 1,
     stack: [
       "React",
-      "React Query",
       "Recoil",
+      "TanStack Query",
       "Tailwind CSS",
-      "Node.js",
-      "Express",
-      "Sequelize",
-      "MySQL",
+      "NestJS",
+      "TypeORM",
+      "MariaDB",
       "Docker",
+      "Nginx",
       "Oracle Cloud",
     ],
     summary: {
@@ -366,7 +371,7 @@ export const projects: Project[] = [
         "학생 등록과 월별 알림장 작성을 처리하는 관리자 페이지",
         "회원가입 없이 관리자가 계정을 생성·배포하는 로그인 구조",
         "월 단위로 정리된 학부모용 알림장 열람 화면 (반응형)",
-        "사용자 정보 암호화 및 요청 로깅",
+        "로그인 시도 제한, JWT 토큰 로테이션, XSS 새니타이징을 적용한 인증 보안",
         "주 1회 DB 자동 백업과 백업 파일 이메일 발송",
         "휴면 계정·계정 삭제 등 운영용 기능",
       ],
@@ -374,7 +379,7 @@ export const projects: Project[] = [
         "Admin pages for registering students and writing monthly notes",
         "No sign-up: the admin creates and hands out accounts",
         "Responsive parent-facing view organized by month",
-        "Encrypted user data and request logging",
+        "Auth hardened with login rate limiting, JWT token rotation, and XSS sanitization",
         "Weekly automated DB backups emailed off-site",
         "Operational features such as dormant and deleted accounts",
       ],
@@ -384,8 +389,8 @@ export const projects: Project[] = [
       en: "Many parents find sign-up forms intimidating, and a conventional registration flow risked the service simply going unused. I removed registration entirely, so the tutor creates accounts and hands them over, and switched the address to a Korean-language URL that parents could read at a glance. Drop-off at the login step disappeared without any usage guide, and the roughly 20 users onboarded since early 2024 are still active.",
     },
     improvements: {
-      ko: "무료 등급 오라클 클라우드에서 운영하다 보니 인스턴스 장애가 곧 데이터 유실로 이어질 수 있다는 점이 가장 큰 리스크였습니다. 주 1회 SQL 백업 파일을 생성해 개인 이메일로 자동 발송하도록 만들어, 서버가 사라져도 복구 가능한 상태를 유지하고 있습니다. 만들고 끝나는 프로젝트와 달리 2년 넘게 직접 운영하면서 로깅·백업·계정 정리처럼 화면에 드러나지 않는 기능이 왜 먼저 필요한지 체감했습니다.",
-      en: "Running on Oracle Cloud's free tier, the biggest risk was that losing the instance would mean losing the data. A weekly SQL dump is generated and emailed to me automatically, so the service stays recoverable even if the server disappears. Operating it myself for over two years, rather than shipping and walking away, showed me why invisible work like logging, backups and account cleanup has to come early.",
+      ko: "무료 등급 오라클 클라우드에서 운영하다 보니 인스턴스 장애가 곧 데이터 유실로 이어질 수 있다는 점이 가장 큰 리스크였습니다. 주 1회 SQL 백업 파일을 생성해 개인 이메일로 자동 발송하도록 만들어, 서버가 사라져도 복구 가능한 상태를 유지하고 있습니다. 2년 넘게 운영하면서 보안 요구도 계속 늘어나, 초기 Express·Sequelize 서버를 NestJS·TypeORM 기반으로 다시 짜고 로그인 시도 제한, JWT 토큰 로테이션, XSS 새니타이징, 구조화된 로그(Winston)를 차례로 추가했습니다. 만들고 끝나는 프로젝트와 달리 계속 운영하다 보니, 화면에 드러나지 않는 보안·로깅 같은 기능이 왜 먼저 필요한지 체감했습니다.",
+      en: "Running on Oracle Cloud's free tier, the biggest risk was that losing the instance would mean losing the data. A weekly SQL dump is generated and emailed to me automatically, so the service stays recoverable even if the server disappears. Over more than two years of running it, security requirements kept growing, so I rewrote the original Express/Sequelize backend on NestJS and TypeORM and added login rate limiting, JWT token rotation, XSS sanitization, and structured logging with Winston along the way. Operating it continuously, rather than shipping and walking away, showed me why invisible work like security and logging has to come early.",
     },
     thumbnail: "/projects/tutoring-notice/thumbnail.png",
     images: [],
