@@ -14,7 +14,8 @@ export type Project = {
   summary: LocalizedText;
   myRole: LocalizedText;
   features: LocalizedList;
-  challenges: LocalizedText;
+  /** Omit when there isn't a meaningful challenge to highlight for this project. */
+  challenges?: LocalizedText;
   improvements: LocalizedText;
   links?: { demo?: string; repo?: string };
   /** Public path, e.g. `/projects/foo/thumb.png`. */
@@ -62,7 +63,7 @@ export const projects: Project[] = [
     },
     category: "company",
     period: { start: "2025-09", end: "2026-02" },
-    teamSize: 1,
+    teamSize: 3,
     stack: [
       "Nuxt.js",
       "Vue.js",
@@ -73,8 +74,8 @@ export const projects: Project[] = [
       "PowerShell",
     ],
     summary: {
-      ko: "대용량 첨부와 외부 공유를 Outlook 안에서 끝낼 수 있게 만든 사내 애드인입니다. 메일 첨부 용량 제한(20MB)과 민감도 레이블(DRM) 때문에 직원들이 거쳐야 했던 별도 웹 서비스를 대체했고, 도입 이후 기존 레거시 웹 서비스 사용률이 10% 수준으로 떨어졌습니다.",
-      en: "An in-house Outlook add-in for sending large attachments and sharing files externally without leaving the mail client. It replaces the separate web tool employees had to use because of the 20MB attachment cap and DRM sensitivity labels, and after rollout usage of that legacy service dropped to about 10%.",
+      ko: "대용량 첨부와 외부 공유를 Outlook 안에서 결재를 거쳐 끝낼 수 있게 만든 사내 애드인입니다. 메일 첨부 용량 제한(20MB)과 민감도 레이블(DRM) 때문에 직원들이 거쳐야 했던 별도 웹 서비스를 대체했고, 도입 이후 기존 레거시 웹 서비스 사용률이 10% 수준으로 떨어졌습니다.",
+      en: "An in-house Outlook add-in that routes large attachments and external sharing through an approval step, without leaving the mail client. It replaces the separate web tool employees had to use because of the 20MB attachment cap and DRM sensitivity labels, and after rollout usage of that legacy service dropped to about 10%.",
     },
     myRole: {
       ko: "프론트엔드(Nuxt.js), 백엔드(Django), 배포까지 풀스택으로 담당했습니다. 기획 단계에서 놓친 결재 엣지 케이스를 발견해 모바일 결재 플로우를 직접 제안·구현했습니다.",
@@ -82,23 +83,23 @@ export const projects: Project[] = [
     },
     features: {
       ko: [
-        "Outlook 내에서 처리하는 20MB 초과 첨부 파일 업로드 및 링크 변환",
-        "민감도 레이블(DRM) 자동 해제 후 외부 공유 링크 발급",
+        "Outlook taskpane에서 20MB 초과 첨부 파일을 업로드하면 자동으로 링크로 변환",
+        "결재가 승인되면 민감도 레이블(DRM)을 자동 해제하고 Graph API로 메일 발송",
         "PowerShell 일괄 처리 기반 다중 파일 레이블 해제",
         "Microsoft Graph API 연동 사내 계정·메일 처리",
         "Teams Bot API 기반 모바일 결재 플로우",
       ],
       en: [
-        "Upload and link conversion for attachments over 20MB, all inside Outlook",
-        "Automatic DRM label removal before issuing an external share link",
+        "Uploading an attachment over 20MB in the Outlook taskpane converts it into a link automatically",
+        "On approval, the sensitivity label (DRM) is removed automatically and the mail is sent via Graph API",
         "Batched PowerShell processing for multi-file label removal",
         "Account and mail handling via Microsoft Graph API",
         "Mobile approval flow built on the Teams Bot API",
       ],
     },
     challenges: {
-      ko: "파일 50개를 첨부하면 백엔드가 파일마다 PowerShell을 호출해 DRM 레이블을 해제하느라 4~5분이 걸렸고, 그동안 사용자는 메일을 보낼 수 없었습니다. 프로세스 호출 오버헤드가 병목이라고 판단해, 레이블이 적용된 파일만 먼저 걸러낸 뒤 대상 경로를 배열로 묶어 단 1회의 PowerShell 명령으로 일괄 처리하도록 로직을 재설계했습니다. 그 결과 50개 파일 기준 처리 시간이 10초대로 줄어, 첨부 후 대기 없이 메일을 보낼 수 있게 됐습니다.",
-      en: "Attaching 50 files took four to five minutes, because the backend spawned a separate PowerShell call per file to strip DRM labels, and users could not send the mail until it finished. Identifying process-spawn overhead as the bottleneck, I filtered down to files that actually carried a label and passed their paths as one array to a single batched PowerShell command. Processing 50 files now takes about ten seconds, so sending no longer stalls on attachments.",
+      ko: "결재가 승인되면 백엔드가 첨부 파일마다 PowerShell을 호출해 DRM 레이블을 해제한 뒤 Graph API로 메일을 보내는데, 파일 50개 기준 이 과정이 4~5분 걸려 승인 후에도 한참 메일이 발송되지 않았습니다. 프로세스 호출 오버헤드가 병목이라고 판단해, 레이블이 적용된 파일만 먼저 걸러낸 뒤 대상 경로를 배열로 묶어 단 1회의 PowerShell 명령으로 일괄 처리하도록 로직을 재설계했습니다. 그 결과 50개 파일 기준 처리 시간이 10초대로 줄어, 승인 직후 바로 메일이 발송되도록 만들었습니다.",
+      en: "Once an approval was granted, the backend called PowerShell once per attached file to strip its DRM label before sending through Graph API, and with 50 files that took four to five minutes, so the mail sat unsent long after approval. Identifying process-spawn overhead as the bottleneck, I filtered down to files that actually carried a label and passed their paths as one array to a single batched PowerShell command. Processing 50 files now takes about ten seconds, so the mail goes out right after approval.",
     },
     improvements: {
       ko: "상급자가 외근·출장 중이면 PC Outlook에 접근할 수 없어 결재가 멈추고 메일 발송까지 막히는 엣지 케이스를 발견했습니다. 기획에 없던 요구였지만 모바일에서 바로 확인 가능한 Teams Bot API 기반 원격 결재 플로우를 제안하고 추가 개발해, 장소와 기기에 상관없이 승인이 처리되도록 만들었습니다. 화면을 그리기 전에 '이 기능이 실제 업무 흐름의 어디에서 멈추는가'를 먼저 확인하는 습관이 생겼습니다.",
@@ -124,7 +125,6 @@ export const projects: Project[] = [
       "Recoil",
       "Tailwind CSS",
       "Go",
-      "ffmpeg",
       "WebSocket",
       "RTSP",
       "Canvas API",
@@ -142,14 +142,14 @@ export const projects: Project[] = [
         "H.265 / H.264 / MJPEG 실시간 스트리밍",
         "타임라인 바로 구간을 옮겨가는 녹화 영상 재생(Playback)",
         "Canvas API로 구현한 OSD 다각형 영역 편집",
-        "카메라 내부에서 구동되는 Go 웹서버와 ffmpeg 영상 중계",
+        "카메라 내부에서 구동되는 Go 웹서버 기반 영상 중계",
         "네트워크·영상·이벤트 등 카메라 설정 관리 화면",
       ],
       en: [
         "Live streaming for H.265, H.264 and MJPEG",
         "Recorded playback with a scrubbing timeline bar",
         "OSD polygon region editor built on the Canvas API",
-        "A Go web server running on-device, relaying video through ffmpeg",
+        "A Go web server running on-device, relaying the video stream",
         "Configuration screens for network, video and event settings",
       ],
     },
@@ -158,8 +158,8 @@ export const projects: Project[] = [
       en: "Cross-compiling the initial Node.js/Express backend with pkg and bundling the 21MB CRA frontend produced a ~60MB payload, too large for the device storage, and the client rejected it. I rewrote the backend in Go for a compact single binary and migrated the frontend build from CRA to Vite so even the UI library was tree-shaken. The final payload came in at 12MB (7MB React + 5MB Go), an 80% reduction, and shipped on device.",
     },
     improvements: {
-      ko: "WebSocket으로 분할 수신되는 H.265 영상은 디코딩 라이브러리 자체가 드물어, WebAssembly 기반 디코더를 골라 Web Worker로 옮겨 메인 스레드 부담을 덜었습니다. 그럼에도 4K 영상에서는 재생이 밀려, 결국 서버가 mp4로 만들어 내려주고 브라우저의 하드웨어 디코딩(video 태그)을 쓰도록 구조를 바꾸고 mp4 앞단의 시간 메타데이터로 타임라인을 제어했습니다. 모든 걸 브라우저 안에서 해결하기보다 어느 계층에서 처리하는 것이 싼지를 먼저 따지게 된 경험이었습니다.",
-      en: "H.265 frames arriving in chunks over WebSocket had almost no decoding options on the web, so I picked a WebAssembly decoder and moved it into a Web Worker to keep the main thread free. Playback still lagged on 4K, so I moved the work down a layer: the server emits mp4 and the browser hardware-decodes it in a video tag, with timeline control driven by time metadata prepended to each segment. It taught me to ask which layer can do the job cheapest before trying to solve everything in the browser.",
+      ko: "녹화 영상을 드래그해 원하는 구간으로 바로 이동하는 재생 바를 만들어야 했는데, 마땅한 캔버스 컴포넌트가 없어 처음부터 직접 구현해야 했습니다. 마우스 위치를 시간 값으로 환산하고, 드래그 중에는 전체 프레임을 다시 그리지 않고 스크럽 위치만 갱신하도록 렌더링을 분리하느라 생각보다 시간이 오래 걸렸습니다. 이 과정에서 픽셀 좌표와 시간 값을 오가는 변환 로직을 별도 함수로 분리해두면, 나중에 확대·축소나 마커 추가 같은 기능을 붙이기 훨씬 쉬워진다는 걸 배웠습니다.",
+      en: "I had to build a scrubbable playback bar for recorded footage that jumps to any point on drag, and with no ready-made canvas component for it, I ended up writing it from scratch. Converting pointer position into a timestamp, and separating the scrub-position redraw from full frame redraws during dragging, took longer than I expected. What stuck with me: keeping the pixel-to-time conversion in its own function made it much easier to add zoom or markers later, instead of tangling that math into the render loop.",
     },
     thumbnail: "/projects/ipc-camera/thumbnail.png",
     images: [],
@@ -215,8 +215,8 @@ export const projects: Project[] = [
       en: "In a control room the dashboard stays open around the clock, and decoding live thermal frames through createObjectURL made browser memory climb until the page froze, a critical failure. chrome://blob-internals/ showed the per-frame Blobs were never being collected, so I revised the render loop to call URL.revokeObjectURL() immediately after each frame was painted. Memory then held flat across long streaming sessions, making continuous monitoring dependable.",
     },
     improvements: {
-      ko: "기능·UI 설계가 전혀 없는 상태에서 한 달 안에 초기 버전을 납품해야 했고, 회원가입 방식이 마감 일주일 전에 관리자 계정 배포 방식으로 바뀌는 등 요구사항도 계속 흔들렸습니다. 우선 동작하는 버전을 넘긴 뒤 릴리스 후 리팩터링 계획을 세워, 복잡해진 센서 페이지 상태를 useState에서 useReducer로 정리하고 테이블 검색·정렬 조건을 localStorage에 저장해 새로고침해도 보던 화면이 유지되도록 개선했습니다. 요구사항이 흔들릴수록 상태 관리의 경계를 먼저 잡아야 한다는 걸 배웠습니다.",
-      en: "I had a month to deliver a first version with no feature or UI spec, and the requirements kept moving: sign-up became admin-issued accounts a week before the deadline. I shipped a working build first, then planned a post-release refactor: the tangled sensor page moved from useState to useReducer, and table search and sort state was persisted to localStorage so a refresh no longer threw operators back to the top. The more requirements move, the earlier you need clear state boundaries.",
+      ko: "한 달이라는 시간만 주어졌을 때는 회의보다 구현부터 서두르는 게 맞지 않을까 하는 생각이 들었습니다. 그런데 막상 짧게라도 방향을 맞추는 회의를 거치고 나니, 화면을 만들었다가 다시 갈아엎는 시행착오가 크게 줄었고 결과적으로 납기일도 맞출 수 있었습니다. 돌이켜보면 시간이 없을수록 오히려 방향을 먼저 확인하는 쪽이 더 빠른 길이었습니다.",
+      en: "With only a month to work with, my first instinct was that jumping straight into implementation would be faster than sitting in meetings. But even a short round of meetings to align on direction cut down a lot of rework from screens I would've had to redo, and it's what let us hit the deadline. Looking back, the less time you have, the more it pays to lock down direction first.",
     },
     thumbnail: "/projects/trusafer/thumbnail.png",
     images: [],
@@ -300,8 +300,8 @@ export const projects: Project[] = [
       "Playwright",
     ],
     summary: {
-      ko: "수학 문제집 사진에서 텍스트와 수식(LaTeX)을 AI로 추출해 편집하고, A4 2단 시험지 PDF와 편집 가능한 한글(.hwpx) 문서로 내보내는 Windows 데스크톱 앱입니다. Python·Node.js 설치 없이 더블클릭만으로 실행되는 단일 실행 파일로 배포하며, 과외 교사인 여자친구가 실제 수업 자료 제작에 쓰고 있습니다.",
-      en: "A Windows desktop app that extracts text and LaTeX formulas from photos of math workbooks, lets you edit them, and exports either a two-column A4 PDF or an editable HWPX (Korean word processor) document. It ships as a single double-click executable with no Python or Node.js required, and my girlfriend, who works as a tutor, uses it to build real lesson materials.",
+      ko: "수학 문제집 사진에서 텍스트와 수식(LaTeX)을 AI로 추출해 편집하고, A4 2단 시험지 PDF와 편집 가능한 한글(.hwpx) 문서로 내보내는 Windows 데스크톱 앱입니다. Python·Node.js 설치 없이 더블클릭만으로 실행되는 단일 실행 파일로 배포하며, 학원 강사인 여자친구가 실제 수업 자료 제작에 쓰고 있습니다.",
+      en: "A Windows desktop app that extracts text and LaTeX formulas from photos of math workbooks, lets you edit them, and exports either a two-column A4 PDF or an editable HWPX (Korean word processor) document. It ships as a single double-click executable with no Python or Node.js required, and my girlfriend, who works as an academy instructor, uses it to build real lesson materials.",
     },
     myRole: {
       ko: "기획·개발·패키징·배포를 1인으로 진행하고 있으며, 실사용자 피드백을 받아 편집기 UX를 반복 개선하고 있습니다.",
@@ -314,7 +314,7 @@ export const projects: Project[] = [
         "블록 드래그 재정렬 기반 문제 편집기와 수동 크롭",
         "가상 A4 뷰어로 미리 보고 그대로 출력하는 2단 PDF 내보내기",
         "한글에서 바로 수정 가능한 .hwpx 내보내기 (네이티브 수식 변환)",
-        "자동 저장·복구 및 프로젝트 파일(.mkpro.json) 입출력",
+        "자동 저장·복구",
       ],
       en: [
         "Gemini-powered OCR that splits one photo into multiple problems with formulas, choices and figure slots",
@@ -322,7 +322,7 @@ export const projects: Project[] = [
         "Block-level drag reordering editor with manual cropping",
         "Two-column PDF export previewed in a virtual A4 viewer and printed as-is",
         "HWPX export that stays editable in the Korean word processor, with native formulas",
-        "Autosave, crash recovery and project files (.mkpro.json)",
+        "Autosave and crash recovery",
       ],
     },
     challenges: {
@@ -340,8 +340,8 @@ export const projects: Project[] = [
   {
     slug: "tutoring-notice",
     title: {
-      ko: "과외 알림장",
-      en: "Tutoring Notes",
+      ko: "학원 알림장",
+      en: "Academy Notes",
     },
     category: "toy",
     period: { start: "2023-11" },
@@ -359,8 +359,8 @@ export const projects: Project[] = [
       "Oracle Cloud",
     ],
     summary: {
-      ko: "선생님이 작성한 월별 학습 리포트를 학부모가 확인하는 과외용 알림장 서비스입니다. 수업 내용을 카카오톡으로 주고받다 보니 개인 대화에 묻혀 다시 찾아보기 어렵던 문제에서 출발했고, 선생님은 학생별·월별 알림장을 관리하고 학부모는 전달받은 계정으로 로그인해 자녀의 학습 리포트를 확인합니다. 오라클 클라우드와 가비아 도메인으로 직접 배포해 2024년부터 지금까지 약 20명의 실사용자가 쓰고 있습니다.",
-      en: "A tutoring notes service where parents read a monthly learning report written by the tutor. Lesson notes used to be sent over KakaoTalk, where they got buried in personal chat and became impossible to look back on; now the tutor manages notes per student and per month, and parents log in with an issued account to read their child's report. Deployed on Oracle Cloud with a Gabia domain, it has been running since 2024 with about 20 active users.",
+      ko: "선생님이 작성한 월별 학습 리포트를 학부모가 확인하는 학원용 알림장 서비스입니다. 수업 내용을 카카오톡으로 주고받다 보니 개인 대화에 묻혀 다시 찾아보기 어렵던 문제에서 출발했고, 선생님은 학생별·월별 알림장을 관리하고 학부모는 전달받은 계정으로 로그인해 자녀의 학습 리포트를 확인합니다. 오라클 클라우드와 가비아 도메인으로 직접 배포해 2024년부터 지금까지 약 20명의 실사용자가 쓰고 있습니다.",
+      en: "An academy notes service where parents read a monthly learning report written by the instructor. Lesson notes used to be sent over KakaoTalk, where they got buried in personal chat and became impossible to look back on; now the instructor manages notes per student and per month, and parents log in with an issued account to read their child's report. Deployed on Oracle Cloud with a Gabia domain, it has been running since 2024 with about 20 active users.",
     },
     myRole: {
       ko: "기획, 프론트엔드, 백엔드, 배포·운영까지 1인으로 담당하고 있으며, 실사용자 요청을 받아 지금도 유지보수하고 있습니다.",
@@ -386,7 +386,7 @@ export const projects: Project[] = [
     },
     challenges: {
       ko: "학부모 중에는 회원가입 절차 자체를 부담스러워하는 분이 많아, 일반적인 가입 플로우를 그대로 두면 서비스가 아예 쓰이지 않을 위험이 있었습니다. 가입 단계를 없애고 관리자가 계정을 만들어 전달하는 구조로 바꾼 뒤, 접속 주소도 학부모가 알아보기 쉽도록 한글 URL로 정리했습니다. 그 결과 별도 사용법 안내 없이도 로그인 단계에서 이탈하는 사례가 사라졌고, 2024년 초 오픈 이후 약 20명의 사용자가 이탈 없이 계속 사용하고 있습니다.",
-      en: "Many parents find sign-up forms intimidating, and a conventional registration flow risked the service simply going unused. I removed registration entirely, so the tutor creates accounts and hands them over, and switched the address to a Korean-language URL that parents could read at a glance. Drop-off at the login step disappeared without any usage guide, and the roughly 20 users onboarded since early 2024 are still active.",
+      en: "Many parents find sign-up forms intimidating, and a conventional registration flow risked the service simply going unused. I removed registration entirely, so the instructor creates accounts and hands them over, and switched the address to a Korean-language URL that parents could read at a glance. Drop-off at the login step disappeared without any usage guide, and the roughly 20 users onboarded since early 2024 are still active.",
     },
     improvements: {
       ko: "무료 등급 오라클 클라우드에서 운영하다 보니 인스턴스 장애가 곧 데이터 유실로 이어질 수 있다는 점이 가장 큰 리스크였습니다. 주 1회 SQL 백업 파일을 생성해 개인 이메일로 자동 발송하도록 만들어, 서버가 사라져도 복구 가능한 상태를 유지하고 있습니다. 2년 넘게 운영하면서 보안 요구도 계속 늘어나, 초기 Express·Sequelize 서버를 NestJS·TypeORM 기반으로 다시 짜고 로그인 시도 제한, JWT 토큰 로테이션, XSS 새니타이징, 구조화된 로그(Winston)를 차례로 추가했습니다. 만들고 끝나는 프로젝트와 달리 계속 운영하다 보니, 화면에 드러나지 않는 보안·로깅 같은 기능이 왜 먼저 필요한지 체감했습니다.",
@@ -497,13 +497,9 @@ export const projects: Project[] = [
         "Responsive UI down to mobile",
       ],
     },
-    challenges: {
-      ko: "입사일이 제각각인 직원들의 연차 개수를 근로기준법 기준으로 계산해야 했는데, 근속 1년 미만과 이후의 산정 방식, 장기 근속 가산이 조건마다 달라 화면에서 임시로 계산하면 사람마다 값이 어긋났습니다. 계산 책임을 전부 백엔드로 모아 입사일과 기준일만 넣으면 개수가 나오는 단일 API로 정리하고, 사용 내역은 원본을 덮어쓰지 않고 히스토리 테이블에 쌓도록 설계했습니다. 덕분에 과거 시점의 잔여 연차도 그대로 재현할 수 있어, 정산 문의가 들어와도 근거를 바로 제시할 수 있었습니다.",
-      en: "Entitlement had to follow Korean labor law across employees with very different hire dates, and the rules diverge for the first year, later years and long-tenure bonuses, so computing it ad hoc in the UI produced inconsistent numbers per person. I moved the whole calculation behind a single backend API that takes a hire date and a reference date, and recorded usage in an append-only history table rather than overwriting balances. Any past balance can be reproduced exactly, so questions about a settlement can be answered with evidence on the spot.",
-    },
     improvements: {
-      ko: "프론트와 백엔드를 혼자 맡아 보니 설계에는 시간이 오래 걸렸지만, 구현 도중 '이 데이터는 이렇게 내려주는 게 낫겠다' 싶을 때 곧바로 API를 고칠 수 있어 전체 작업 시간은 오히려 짧았습니다. 협업 때 요청하고 기다리던 대기 시간이 사라진 셈입니다. 다만 사내망 배포라 SSL 인증서가 없어 구글 캘린더 연동은 적용하지 못했고, 연동 테스트만 미리 마쳐 외부망으로 전환하면 바로 붙일 수 있도록 준비해 두었습니다.",
-      en: "Owning both sides made design take longer, but the build itself went faster: whenever I thought 'the API should just return it this way', I could change it immediately instead of filing a request and waiting. The one thing I couldn't ship was Google Calendar sync, because the internal-network deployment had no SSL certificate, so I validated the integration separately and left it ready to enable if the service ever moves outside.",
+      ko: "프론트와 백엔드를 혼자 맡아 보니 설계에는 시간이 오래 걸렸지만, 구현 도중 '이 데이터는 이렇게 내려주는 게 낫겠다' 싶을 때 곧바로 API를 고칠 수 있어 전체 작업 시간은 오히려 짧았습니다. 설계와 구현을 혼자 오가며 빠르게 검증할 수 있다는 걸 이때 체감했습니다.",
+      en: "Owning both sides made design take longer, but the build itself went faster: whenever I thought 'the API should just return it this way', I could change it immediately instead of filing a request and waiting. Going back and forth between design and implementation on my own is where I really felt how fast that loop can be.",
     },
     thumbnail: "/projects/annual-leave/thumbnail.png",
     images: [],

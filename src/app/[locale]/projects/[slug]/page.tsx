@@ -143,12 +143,14 @@ export default async function ProjectDetailPage({
         </p>
       </DetailSection>
 
-      {/* 5. Challenges */}
-      <DetailSection title={t("detail.challenges")}>
-        <p className="text-body text-muted-foreground">
-          {project.challenges[locale]}
-        </p>
-      </DetailSection>
+      {/* 5. Challenges (optional — omitted when there isn't a meaningful one) */}
+      {project.challenges ? (
+        <DetailSection title={t("detail.challenges")}>
+          <p className="text-body text-muted-foreground">
+            {project.challenges[locale]}
+          </p>
+        </DetailSection>
+      ) : null}
 
       {/* 6. Improvements & learnings */}
       <DetailSection title={t("detail.improvements")}>
