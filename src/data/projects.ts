@@ -161,7 +161,7 @@ export const projects: Project[] = [
       ko: "녹화 영상을 드래그해 원하는 구간으로 바로 이동하는 재생 바를 만들어야 했는데, 마땅한 캔버스 컴포넌트가 없어 처음부터 직접 구현해야 했습니다. 마우스 위치를 시간 값으로 환산하고, 드래그 중에는 전체 프레임을 다시 그리지 않고 스크럽 위치만 갱신하도록 렌더링을 분리하느라 생각보다 시간이 오래 걸렸습니다. 이 과정에서 픽셀 좌표와 시간 값을 오가는 변환 로직을 별도 함수로 분리해두면, 나중에 확대·축소나 마커 추가 같은 기능을 붙이기 훨씬 쉬워진다는 걸 배웠습니다.",
       en: "I had to build a scrubbable playback bar for recorded footage that jumps to any point on drag, and with no ready-made canvas component for it, I ended up writing it from scratch. Converting pointer position into a timestamp, and separating the scrub-position redraw from full frame redraws during dragging, took longer than I expected. What stuck with me: keeping the pixel-to-time conversion in its own function made it much easier to add zoom or markers later, instead of tangling that math into the render loop.",
     },
-    thumbnail: "/projects/ipc-camera/thumbnail.png",
+    thumbnail: "/projects/ipc-camera/thumbnail.webp",
     images: [],
   },
   {
@@ -218,7 +218,7 @@ export const projects: Project[] = [
       ko: "한 달이라는 시간만 주어졌을 때는 회의보다 구현부터 서두르는 게 맞지 않을까 하는 생각이 들었습니다. 그런데 막상 짧게라도 방향을 맞추는 회의를 거치고 나니, 화면을 만들었다가 다시 갈아엎는 시행착오가 크게 줄었고 결과적으로 납기일도 맞출 수 있었습니다. 돌이켜보면 시간이 없을수록 오히려 방향을 먼저 확인하는 쪽이 더 빠른 길이었습니다.",
       en: "With only a month to work with, my first instinct was that jumping straight into implementation would be faster than sitting in meetings. But even a short round of meetings to align on direction cut down a lot of rework from screens I would've had to redo, and it's what let us hit the deadline. Looking back, the less time you have, the more it pays to lock down direction first.",
     },
-    thumbnail: "/projects/trusafer/thumbnail.png",
+    thumbnail: "/projects/trusafer/thumbnail.webp",
     images: [],
   },
   {
@@ -276,7 +276,7 @@ export const projects: Project[] = [
       ko: "Chart.js로 실시간 데이터를 그리면서, '얼마나 자주, 얼마나 많이 보여줄 것인가'가 프론트엔드만의 문제가 아니라는 걸 알게 됐습니다. 백엔드 팀원과 DB에 어느 범위까지 보관하고 어떤 단위로 집계해 내려줄지 먼저 합의한 뒤 화면을 만들면서, 불필요한 데이터 왕복과 재작업이 눈에 띄게 줄었습니다. 영상 처리에서도 rtsp-relay 같은 기성 라이브러리보다 ffmpeg를 직접 다루는 편이 요구사항 변경에 훨씬 유연했습니다. 한편 디자이너 없이 19개월간 UI를 끌고 가며 공통 컴포넌트와 디자인 기준을 먼저 세워야 한다는 것도 체감했습니다.",
       en: "Rendering live data with Chart.js made it clear that 'how often and how much to show' is not a frontend-only decision. Agreeing with the backend team on retention windows and aggregation granularity before building the screens cut out a lot of redundant round trips and rework. For video, working directly with ffmpeg proved far more adaptable to changing requirements than an off-the-shelf wrapper like rtsp-relay. Carrying the UI for 19 months without a designer also taught me to establish shared components and design rules early.",
     },
-    thumbnail: "/projects/plandy/thumbnail.png",
+    thumbnail: "/projects/plandy/thumbnail.webp",
     images: [],
   },
   {
@@ -392,7 +392,7 @@ export const projects: Project[] = [
       ko: "무료 등급 오라클 클라우드에서 운영하다 보니 인스턴스 장애가 곧 데이터 유실로 이어질 수 있다는 점이 가장 큰 리스크였습니다. 주 1회 SQL 백업 파일을 생성해 개인 이메일로 자동 발송하도록 만들어, 서버가 사라져도 복구 가능한 상태를 유지하고 있습니다. 2년 넘게 운영하면서 보안 요구도 계속 늘어나, 초기 Express·Sequelize 서버를 NestJS·TypeORM 기반으로 다시 짜고 로그인 시도 제한, JWT 토큰 로테이션, XSS 새니타이징, 구조화된 로그(Winston)를 차례로 추가했습니다. 만들고 끝나는 프로젝트와 달리 계속 운영하다 보니, 화면에 드러나지 않는 보안·로깅 같은 기능이 왜 먼저 필요한지 체감했습니다.",
       en: "Running on Oracle Cloud's free tier, the biggest risk was that losing the instance would mean losing the data. A weekly SQL dump is generated and emailed to me automatically, so the service stays recoverable even if the server disappears. Over more than two years of running it, security requirements kept growing, so I rewrote the original Express/Sequelize backend on NestJS and TypeORM and added login rate limiting, JWT token rotation, XSS sanitization, and structured logging with Winston along the way. Operating it continuously, rather than shipping and walking away, showed me why invisible work like security and logging has to come early.",
     },
-    thumbnail: "/projects/tutoring-notice/thumbnail.png",
+    thumbnail: "/projects/tutoring-notice/thumbnail.webp",
     images: [],
   },
   {
@@ -448,7 +448,7 @@ export const projects: Project[] = [
       ko: "처음 맡은 외주 성격의 프로젝트라 신경 써서 구현했다고 생각했지만, 테스트 단계에서 예상보다 많은 버그가 나왔습니다. 이후로는 기능을 만들면서 엣지 케이스 목록을 먼저 정리하고 하나씩 검증하는 습관을 들였습니다. 제가 자리를 비운 동안 팀원이 의뢰자와 소통해 '구현할 것과 하지 않을 것'을 정리해 준 덕분에 범위가 흔들리지 않았던 점도 컸고, 요구사항을 문서로 고정해 두는 일의 가치를 배웠습니다. 2024년에는 같은 의뢰자에게 재의뢰를 받아 연도별 필수 문항 로직을 추가하며 서비스를 확장했습니다.",
       en: "It was my first client-style project and I thought I'd been careful, but testing surfaced more bugs than expected. Since then I list edge cases alongside the feature itself and verify them one by one. Scope also held steady because my teammate kept talking to the client while I was away, keeping a clear record of what was in and out. That is where I learned the value of writing requirements down. In 2024 the same client came back, and I extended the service with per-year required-question logic.",
     },
-    thumbnail: "/projects/survey/thumbnail.png",
+    thumbnail: "/projects/survey/thumbnail.webp",
     images: [],
   },
   {
@@ -501,7 +501,7 @@ export const projects: Project[] = [
       ko: "프론트와 백엔드를 혼자 맡아 보니 설계에는 시간이 오래 걸렸지만, 구현 도중 '이 데이터는 이렇게 내려주는 게 낫겠다' 싶을 때 곧바로 API를 고칠 수 있어 전체 작업 시간은 오히려 짧았습니다. 설계와 구현을 혼자 오가며 빠르게 검증할 수 있다는 걸 이때 체감했습니다.",
       en: "Owning both sides made design take longer, but the build itself went faster: whenever I thought 'the API should just return it this way', I could change it immediately instead of filing a request and waiting. Going back and forth between design and implementation on my own is where I really felt how fast that loop can be.",
     },
-    thumbnail: "/projects/annual-leave/thumbnail.png",
+    thumbnail: "/projects/annual-leave/thumbnail.webp",
     images: [],
   },
   {
@@ -544,7 +544,7 @@ export const projects: Project[] = [
       ko: "다 만들고 나서야 이미 성숙한 오픈소스 라벨링 툴이 있다는 걸 알았습니다. 이후로는 구현 전에 기존 솔루션부터 조사하게 됐지만, 이 프로젝트에서 익힌 Canvas 좌표계와 이벤트 처리는 그대로 남아 IPC의 OSD 다각형 편집과 TRUSafer의 열영상 렌더링을 구현할 때 바로 쓸 수 있었습니다.",
       en: "I only discovered the mature open-source labeling tools after finishing this one, which is why I now survey existing solutions before building. The Canvas coordinate math and event handling stuck around, though: both went straight into the OSD polygon editor in IPC and the thermal-frame rendering in TRUSafer.",
     },
-    thumbnail: "/projects/label-img/thumbnail.png",
+    thumbnail: "/projects/label-img/thumbnail.webp",
     images: [],
   },
 ];

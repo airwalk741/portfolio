@@ -99,14 +99,21 @@ export default async function ProjectDetailPage({
         </dl>
       </Reveal>
 
+      {/*
+        object-contain (not cover): thumbnails range from full screenshots to
+        small square app icons/logos, so cropping to fill would zoom in
+        awkwardly on the latter. Letterboxing onto bg-primary-tint keeps every
+        thumbnail's full frame visible regardless of its native aspect ratio.
+      */}
       <Reveal className="relative mt-10 aspect-video overflow-hidden rounded-modal bg-primary-tint">
         <Image
           src={project.thumbnail}
           alt={project.title[locale]}
           fill
           sizes="(min-width: 768px) 768px, 100vw"
+          quality={85}
           priority
-          className="object-cover"
+          className="object-contain"
         />
       </Reveal>
 
