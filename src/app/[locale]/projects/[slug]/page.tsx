@@ -12,12 +12,18 @@ import { getProjectBySlug, projects } from "@/data/projects";
 import { formatPeriod } from "@/data/types";
 
 /**
- * These two thumbnails are small source icons/logos (192px and 256px), not
- * screenshots — stretching them to fill the full hero height (~430px) would
- * upscale ~2x and look visibly soft. Capping their display size keeps the
- * upscale modest instead.
+ * Icon/logo-style thumbnails rather than full screenshots — real small
+ * source icons (192px/256px) or generated illustrations (M365Works,
+ * annual-leave) — shown contained at a capped size on the tint background
+ * instead of filled edge to edge. Everything else is an actual large
+ * screenshot, so it fills the frame with object-cover instead.
  */
-const COMPACT_THUMBNAIL_SLUGS = new Set(["ipc-camera", "tutoring-notice"]);
+const COMPACT_THUMBNAIL_SLUGS = new Set([
+  "ipc-camera",
+  "tutoring-notice",
+  "m365works",
+  "annual-leave",
+]);
 
 /**
  * Params for both dynamic segments are generated here (bottom-up), so every
@@ -108,10 +114,10 @@ export default async function ProjectDetailPage({
       </Reveal>
 
       {/*
-        object-contain (not cover): thumbnails range from full screenshots to
-        small square app icons/logos, so cropping to fill would zoom in
-        awkwardly on the latter. Letterboxing onto bg-primary-tint keeps every
-        thumbnail's full frame visible regardless of its native aspect ratio.
+        Real screenshots are large enough to fill the frame (object-cover,
+        cropping overflow). The icon/logo-style thumbnails in
+        COMPACT_THUMBNAIL_SLUGS are shown contained at a capped size instead —
+        cropping a small icon to fill would zoom in awkwardly on it.
       */}
       <Reveal className="relative mt-10 aspect-video overflow-hidden rounded-modal bg-primary-tint">
         {COMPACT_THUMBNAIL_SLUGS.has(project.slug) ? (
@@ -136,7 +142,7 @@ export default async function ProjectDetailPage({
             sizes="(min-width: 768px) 768px, 100vw"
             quality={85}
             priority
-            className="object-contain"
+            className="object-cover"
           />
         )}
       </Reveal>

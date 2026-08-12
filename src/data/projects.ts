@@ -501,7 +501,7 @@ export const projects: Project[] = [
       ko: "프론트와 백엔드를 혼자 맡다 보니 설계에는 시간이 오래 걸렸습니다. 다만 구현 도중 API 응답 형태를 더 나은 쪽으로 바꾸고 싶을 때 바로 고쳐볼 수 있었던 경험 덕분에, 이후 팀으로 협업하는 프로젝트에서도 프론트와 백엔드가 데이터 형태를 미리 맞춰두는 게 왜 중요한지 체감할 수 있었습니다.",
       en: "Owning both the frontend and backend meant design took longer on my own. But being able to adjust the API response shape the moment I saw a better fit taught me why agreeing on the data contract between frontend and backend up front matters, especially on projects where I'm working with a team.",
     },
-    thumbnail: "/projects/annual-leave/thumbnail.webp",
+    thumbnail: "/projects/annual-leave/thumbnail.png",
     images: [],
   },
   {
