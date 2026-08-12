@@ -158,8 +158,8 @@ export const projects: Project[] = [
       en: "Cross-compiling the initial Node.js/Express backend with pkg and bundling the 21MB CRA frontend produced a ~60MB payload, too large for the device storage, and the client rejected it. I rewrote the backend in Go for a compact single binary and migrated the frontend build from CRA to Vite so even the UI library was tree-shaken. The final payload came in at 12MB (7MB React + 5MB Go), an 80% reduction, and shipped on device.",
     },
     improvements: {
-      ko: "녹화 영상을 드래그해 원하는 구간으로 바로 이동하는 재생 바를 만들어야 했는데, 마땅한 캔버스 컴포넌트가 없어 처음부터 직접 구현해야 했습니다. 마우스 위치를 시간 값으로 환산하고, 드래그 중에는 전체 프레임을 다시 그리지 않고 스크럽 위치만 갱신하도록 렌더링을 분리하느라 생각보다 시간이 오래 걸렸습니다. 이 과정에서 픽셀 좌표와 시간 값을 오가는 변환 로직을 별도 함수로 분리해두면, 나중에 확대·축소나 마커 추가 같은 기능을 붙이기 훨씬 쉬워진다는 걸 배웠습니다.",
-      en: "I had to build a scrubbable playback bar for recorded footage that jumps to any point on drag, and with no ready-made canvas component for it, I ended up writing it from scratch. Converting pointer position into a timestamp, and separating the scrub-position redraw from full frame redraws during dragging, took longer than I expected. What stuck with me: keeping the pixel-to-time conversion in its own function made it much easier to add zoom or markers later, instead of tangling that math into the render loop.",
+      ko: "반복되는 계산 로직을 함수로 따로 빼서 모아두고, 코드에 남기는 주석도 더 꼼꼼하게 쓰기 시작했습니다. 나중에 유지보수하거나 다른 사람에게 인수인계할 때 이게 큰 도움이 됐습니다. 개발이 끝났다고 손을 놓는 게 아니라, 이후에도 코드를 고치고 다른 사람이 봐도 이해할 수 있게 주석을 남기는 것까지가 개발이라는 걸 배웠습니다.",
+      en: "I started pulling repeated calculations out into their own functions and writing more thorough comments as I went. That made a real difference later, both for my own maintenance work and when handing the project off to someone else. I learned that development doesn't end at launch: keeping the code maintainable and leaving comments someone else can actually follow is part of the job too.",
     },
     thumbnail: "/projects/ipc-camera/thumbnail.webp",
     images: [],
@@ -498,8 +498,8 @@ export const projects: Project[] = [
       ],
     },
     improvements: {
-      ko: "프론트와 백엔드를 혼자 맡아 보니 설계에는 시간이 오래 걸렸지만, 구현 도중 '이 데이터는 이렇게 내려주는 게 낫겠다' 싶을 때 곧바로 API를 고칠 수 있어 전체 작업 시간은 오히려 짧았습니다. 설계와 구현을 혼자 오가며 빠르게 검증할 수 있다는 걸 이때 체감했습니다.",
-      en: "Owning both sides made design take longer, but the build itself went faster: whenever I thought 'the API should just return it this way', I could change it immediately instead of filing a request and waiting. Going back and forth between design and implementation on my own is where I really felt how fast that loop can be.",
+      ko: "프론트와 백엔드를 혼자 맡다 보니 설계에는 시간이 오래 걸렸습니다. 다만 구현 도중 API 응답 형태를 더 나은 쪽으로 바꾸고 싶을 때 바로 고쳐볼 수 있었던 경험 덕분에, 이후 팀으로 협업하는 프로젝트에서도 프론트와 백엔드가 데이터 형태를 미리 맞춰두는 게 왜 중요한지 체감할 수 있었습니다.",
+      en: "Owning both the frontend and backend meant design took longer on my own. But being able to adjust the API response shape the moment I saw a better fit taught me why agreeing on the data contract between frontend and backend up front matters, especially on projects where I'm working with a team.",
     },
     thumbnail: "/projects/annual-leave/thumbnail.webp",
     images: [],

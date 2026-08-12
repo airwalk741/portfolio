@@ -12,6 +12,14 @@ import { getProjectBySlug, projects } from "@/data/projects";
 import { formatPeriod } from "@/data/types";
 
 /**
+ * These two thumbnails are small source icons/logos (192px and 256px), not
+ * screenshots — stretching them to fill the full hero height (~430px) would
+ * upscale ~2x and look visibly soft. Capping their display size keeps the
+ * upscale modest instead.
+ */
+const COMPACT_THUMBNAIL_SLUGS = new Set(["ipc-camera", "tutoring-notice"]);
+
+/**
  * Params for both dynamic segments are generated here (bottom-up), so every
  * locale × slug combination is prerendered at build time.
  */
@@ -106,15 +114,31 @@ export default async function ProjectDetailPage({
         thumbnail's full frame visible regardless of its native aspect ratio.
       */}
       <Reveal className="relative mt-10 aspect-video overflow-hidden rounded-modal bg-primary-tint">
-        <Image
-          src={project.thumbnail}
-          alt={project.title[locale]}
-          fill
-          sizes="(min-width: 768px) 768px, 100vw"
-          quality={85}
-          priority
-          className="object-contain"
-        />
+        {COMPACT_THUMBNAIL_SLUGS.has(project.slug) ? (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="relative h-[200px] w-[200px]">
+              <Image
+                src={project.thumbnail}
+                alt={project.title[locale]}
+                fill
+                sizes="200px"
+                quality={90}
+                priority
+                className="object-contain"
+              />
+            </div>
+          </div>
+        ) : (
+          <Image
+            src={project.thumbnail}
+            alt={project.title[locale]}
+            fill
+            sizes="(min-width: 768px) 768px, 100vw"
+            quality={85}
+            priority
+            className="object-contain"
+          />
+        )}
       </Reveal>
 
       {/* 2. Overview */}
