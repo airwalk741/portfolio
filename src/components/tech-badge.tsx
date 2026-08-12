@@ -1,5 +1,5 @@
-import { createElement } from "react";
-import { FallbackTechIcon, getTechIcon } from "@/lib/tech-icons";
+import { createElement, type CSSProperties } from "react";
+import { FallbackTechIcon, getTechColor, getTechIcon } from "@/lib/tech-icons";
 
 type TechBadgeProps = {
   /** Display label, e.g. `"Next.js"`. Also used to look up the brand icon. */
@@ -21,21 +21,38 @@ type TechBadgeProps = {
  * render as plain inline SVG inside Server Components — nothing ships to the
  * client bundle for the server-rendered usages.
  */
-const ICON_PROPS = {
-  "aria-hidden": "true",
-  focusable: "false",
-  className: "size-3.5 shrink-0 text-primary",
-} as const;
+const ICON_BASE = "size-3.5 shrink-0";
+
+/**
+ * Brand hexes ride in as custom properties instead of a plain `style.color`
+ * because the light and dark values differ per brand (see `TECH_COLORS_DARK`),
+ * and an inline `color` can't be re-declared per theme. The `dark:` variant is
+ * emitted after the base one in the stylesheet, so it wins on equal specificity.
+ */
+const ICON_BRAND_CLASS = `${ICON_BASE} [color:var(--tech-color)] dark:[color:var(--tech-color-dark)]`;
+
+/** Generic (LuCode / LuNetwork / …) glyphs have no brand color to borrow. */
+const ICON_NEUTRAL_CLASS = `${ICON_BASE} text-muted-foreground`;
 
 export function TechBadge({ name, icon, className }: TechBadgeProps) {
+  const key = icon ?? name;
+  const color = getTechColor(key);
+
   // `createElement` rather than `<Icon />`: the icon is *looked up*, not
   // defined, during render — but rendering a capitalized local as JSX trips
   // `react-hooks/static-components`, which exists to catch genuinely
   // render-created components.
-  const iconElement = createElement(
-    getTechIcon(icon ?? name) ?? FallbackTechIcon,
-    ICON_PROPS,
-  );
+  const iconElement = createElement(getTechIcon(key) ?? FallbackTechIcon, {
+    "aria-hidden": "true",
+    focusable: "false",
+    className: color ? ICON_BRAND_CLASS : ICON_NEUTRAL_CLASS,
+    style: color
+      ? ({
+          "--tech-color": color.light,
+          "--tech-color-dark": color.dark,
+        } as CSSProperties)
+      : undefined,
+  });
 
   return (
     <span
