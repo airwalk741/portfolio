@@ -68,10 +68,12 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             </div>
           </RevealItem>
           <RevealItem
-            as="p"
-            className="text-body mt-8 max-w-2xl text-muted-foreground"
+            as="div"
+            className="mt-8 flex max-w-2xl flex-col gap-4 text-body text-muted-foreground"
           >
-            {profile.bio[locale]}
+            {profile.bio[locale].map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
           </RevealItem>
           <RevealItem as="div" className="mt-10 flex flex-wrap gap-3">
             <Link
