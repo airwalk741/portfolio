@@ -84,7 +84,17 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
 
   return (
-    <html lang={locale} className={pretendard.variable} suppressHydrationWarning>
+    // `data-scroll-behavior="smooth"` opts back into the Next.js 15 behaviour of
+    // temporarily forcing `scroll-behavior: auto` during route transitions, so
+    // the global `scroll-behavior: smooth` (globals.css) only applies to in-page
+    // anchors and navigations still jump instantly. Without it Next.js 16 warns
+    // in the console and animates the scroll reset on every navigation.
+    <html
+      lang={locale}
+      className={pretendard.variable}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <body className="min-h-screen bg-background text-foreground font-sans antialiased">
         <NextIntlClientProvider>
           <ThemeProvider>

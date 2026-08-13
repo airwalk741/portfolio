@@ -64,5 +64,11 @@
       "repo": "Repository",
       "back": "Back to list"
     }
+  },
+  "NotFound": {
+    "title": "This page doesn't exist",
+    "description": "The address may be mistyped, or the page has moved or been removed. Try one of the links below.",
+    "home": "Back to home",
+    "projects": "View Projects"
   }
 }

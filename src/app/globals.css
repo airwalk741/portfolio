@@ -227,6 +227,17 @@
   }
 }
 
+/* No-JS 폴백 — <Reveal>/<RevealItem>은 initial="hidden"(opacity:0) 인라인 스타일로
+   시작하므로 framer-motion이 실행되지 않으면 본문이 영영 보이지 않는다.
+   author origin의 !important는 인라인 스타일보다 우선하므로 스크립트가 꺼진
+   환경에서도 텍스트가 정상 노출된다. */
+@media (scripting: none) {
+  .reveal-fallback {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
