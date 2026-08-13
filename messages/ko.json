@@ -8,9 +8,9 @@
     "projects": "프로젝트"
   },
   "Theme": {
-    "light": "라이트",
-    "dark": "다크",
-    "system": "시스템"
+    "toggle": "테마 전환",
+    "switchToLight": "라이트 모드로 전환",
+    "switchToDark": "다크 모드로 전환"
   },
   "Home": {
     "intro": {

@@ -91,6 +91,18 @@ const reducedItemVariants: Variants = {
 
 const VIEWPORT = { once: true, amount: 0.15, margin: "0px 0px -10% 0px" };
 
+/**
+ * `stagger` containers (e.g. the `<ul>` wrapping a project list) can be far
+ * taller than the viewport once every child is laid out. `VIEWPORT.amount`
+ * is a fraction of the *observed element's own height*, so on a long list
+ * the visible sliver at first paint can sit just under 0.15 and the reveal
+ * never fires without an extra scroll nudge. `"some"` triggers as soon as
+ * any part of the container is visible, which is what "stagger the children
+ * into view" actually means for an element that is mostly off-screen by
+ * design.
+ */
+const STAGGER_VIEWPORT = { once: true, amount: "some", margin: "0px 0px -10% 0px" } as const;
+
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
 let reducedMotionQuery: MediaQueryList | null = null;
@@ -195,7 +207,7 @@ export function Reveal({
       variants={variants}
       initial="hidden"
       whileInView="visible"
-      viewport={VIEWPORT}
+      viewport={stagger ? STAGGER_VIEWPORT : VIEWPORT}
     >
       {children}
     </Tag>

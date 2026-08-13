@@ -8,9 +8,9 @@
     "projects": "Projects"
   },
   "Theme": {
-    "light": "Light",
-    "dark": "Dark",
-    "system": "System"
+    "toggle": "Toggle theme",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode"
   },
   "Home": {
     "intro": {
