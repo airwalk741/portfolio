@@ -14,7 +14,7 @@ export function Sidebar() {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex md:fixed md:inset-y-0 md:left-0 md:w-56 md:flex-col md:justify-between md:border-r md:border-border md:px-6 md:py-8">
+      <aside className="hidden md:flex md:fixed md:inset-y-0 md:left-0 md:w-56 md:flex-col md:justify-between md:border-r md:border-border md:px-6 md:py-8 print:hidden">
         <nav className="flex flex-col gap-4">
           {links.map((link) => (
             <Link
@@ -33,7 +33,7 @@ export function Sidebar() {
       </aside>
 
       {/* Mobile top bar */}
-      <header className="flex md:hidden items-center justify-between border-b border-border px-4 py-3">
+      <header className="flex md:hidden items-center justify-between border-b border-border px-4 py-3 print:hidden">
         <nav className="flex gap-4">
           {links.map((link) => (
             <Link

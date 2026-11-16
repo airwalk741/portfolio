@@ -34,7 +34,7 @@ export const experiences: Experience[] = [
     organization: { ko: "삼성전자", en: "Samsung Electronics" },
     period: { start: "2021-01", end: "2021-08" },
     description: {
-      ko: "삼성 주관 소프트웨어 교육과정을 수료하고, 웹 개발 중심의 팀 프로젝트를 진행했습니다.",
+      ko: "삼성 주관 소프트웨어 교육과정 수료 및 웹 개발 중심 팀 프로젝트 진행.",
       en: "Completed Samsung's software engineering program, working mainly on team-based web projects.",
     },
   },
@@ -50,7 +50,7 @@ export const experiences: Experience[] = [
       en: "Telecommunications Technology Association (TTA)",
     },
     description: {
-      ko: "프론트엔드 단독 담당자로 인증 프로세스에 참여했습니다. 인증 요구사항에 맞춰 인증·권한 처리를 재설계하고 보안 취약점을 사전 점검해, 소프트웨어 품질 인증인 GS 1등급을 획득했습니다.",
+      ko: "프론트엔드 단독 담당자로 인증 프로세스 참여. 인증 요구사항에 맞춘 인증 및 권한 처리 재설계와 보안 취약점 사전 점검으로 GS 인증 1등급 획득.",
       en: "Took part in the certification process as the sole frontend owner, reworking the authentication and permission flow to meet the requirements and auditing security issues up front. The platform passed with Grade 1, Korea's software quality certification.",
     },
   },
@@ -63,7 +63,7 @@ export const experiences: Experience[] = [
     },
     organization: { ko: "한국화학융합시험연구원(KTR)", en: "KTR" },
     description: {
-      ko: "DFS 기반 공정 조건 최적화 알고리즘을 직접 설계·구현해 공인 시험기관의 소프트웨어 시험을 통과했습니다.",
+      ko: "DFS 기반 공정 조건 최적화 알고리즘 직접 설계 및 구현으로 공인 시험기관 소프트웨어 시험 통과.",
       en: "Designed and implemented a DFS-based process optimization algorithm that passed an accredited software test.",
     },
   },

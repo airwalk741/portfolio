@@ -21,9 +21,9 @@ export const careers: Career[] = [
     period: { start: "2024-09" },
     highlights: {
       ko: [
-        "Outlook 대용량 첨부·외부 공유 애드인(M365Works)을 Nuxt.js·Django 기반으로 풀스택 개발했습니다.",
-        "PowerShell 일괄 처리(Batch)로 다중 파일 DRM 레이블 해제 시간을 4분에서 10초로 단축했습니다.",
-        "Microsoft Graph API와 Teams Bot API를 연동해 PC 없이도 처리 가능한 모바일 결재 플로우를 추가 설계·구현했습니다.",
+        "Outlook 대용량 첨부 및 외부 공유 애드인(M365Works)을 Nuxt.js와 Django 기반으로 풀스택 개발.",
+        "PowerShell 일괄 처리(Batch)로 다중 파일 DRM 레이블 해제 시간을 4분에서 10초로 단축.",
+        "Microsoft Graph API와 Teams Bot API를 연동해 PC 없이도 처리 가능한 모바일 결재 플로우 추가 설계 및 구현.",
       ],
       en: [
         "Built M365Works, an Outlook add-in for large attachments and external sharing, end to end with Nuxt.js and Django.",
@@ -40,9 +40,9 @@ export const careers: Career[] = [
     period: { start: "2021-09", end: "2024-08" },
     highlights: {
       ko: [
-        "CPS 관제 플랫폼 Plandy의 프론트엔드를 단독으로 맡아 Vue 3 → React 아키텍처 전환을 제안·주도했고, GS 인증 1등급 획득에 기여했습니다.",
-        "IP 카메라 임베디드 웹(IPC)을 1인 풀스택으로 개발해 빌드 용량을 60MB에서 12MB로 줄이고 기기 탑재에 성공했습니다.",
-        "화재 예측 관제 대시보드(TRUSafer)에서 Blob 메모리 누수를 해결해 24시간 상시 관제 환경의 안정성을 확보했습니다.",
+        "CPS 관제 플랫폼 Plandy의 프론트엔드를 단독으로 맡아 Vue 3 → React 아키텍처 전환 주도 및 GS 인증 1등급 획득에 기여.",
+        "IP 카메라 임베디드 웹(IPC) 1인 풀스택 개발 및 빌드 용량 최적화(60MB → 12MB)로 기기 탑재 성공.",
+        "화재 예측 관제 대시보드(TRUSafer)의 Blob 메모리 누수 해결로 24시간 상시 관제 환경 안정성 확보.",
       ],
       en: [
         "Owned the frontend of Plandy, a CPS monitoring platform, and drove its Vue 3 → React migration; the platform earned a GS Certification Grade 1.",

@@ -178,7 +178,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               </h3>
               <p className="text-body mt-1 text-muted-foreground">
                 {education.major[locale]}
-                {education.degree ? ` · ${education.degree[locale]}` : ""}
+                {education.degree ? ` (${education.degree[locale]})` : ""}
               </p>
               {education.note ? (
                 <p className="text-caption mt-3 text-muted-foreground">

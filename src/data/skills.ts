@@ -63,7 +63,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     id: "infra",
-    label: { ko: "데이터 · 인프라", en: "Data & Infra" },
+    label: { ko: "데이터 및 인프라", en: "Data & Infra" },
     items: [
       { name: "MySQL" },
       { name: "MariaDB" },
@@ -75,7 +75,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     id: "integration",
-    label: { ko: "프로토콜 · 연동", en: "Protocols & Integrations" },
+    label: { ko: "프로토콜 및 연동", en: "Protocols & Integrations" },
     items: [
       { name: "MQTT" },
       { name: "WebSocket" },

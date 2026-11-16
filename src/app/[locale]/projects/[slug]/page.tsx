@@ -189,12 +189,14 @@ export default async function ProjectDetailPage({
         </DetailSection>
       ) : null}
 
-      {/* 6. Improvements & learnings */}
-      <DetailSection title={t("detail.improvements")}>
-        <p className="text-body text-muted-foreground">
-          {project.improvements[locale]}
-        </p>
-      </DetailSection>
+      {/* 6. Improvements & learnings (optional) */}
+      {project.improvements ? (
+        <DetailSection title={t("detail.improvements")}>
+          <p className="text-body text-muted-foreground">
+            {project.improvements[locale]}
+          </p>
+        </DetailSection>
+      ) : null}
 
       {/* 7. Screenshots & links (optional) */}
       {project.images && project.images.length > 0 ? (

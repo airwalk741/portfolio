@@ -230,11 +230,21 @@
 /* No-JS 폴백 — <Reveal>/<RevealItem>은 initial="hidden"(opacity:0) 인라인 스타일로
    시작하므로 framer-motion이 실행되지 않으면 본문이 영영 보이지 않는다.
    author origin의 !important는 인라인 스타일보다 우선하므로 스크립트가 꺼진
-   환경에서도 텍스트가 정상 노출된다. */
-@media (scripting: none) {
+   환경에서도 텍스트가 정상 노출된다.
+   print에도 같은 문제가 있다 — whileInView는 실제로 스크롤해서 뷰포트에
+   들어와야 트리거되는데, 인쇄/PDF 출력은 페이지를 스크롤하지 않고 전체를
+   한 번에 레이아웃하므로 아직 안 들어온 섹션은 opacity:0로 인쇄된다. */
+@media (scripting: none), print {
   .reveal-fallback {
     opacity: 1 !important;
     transform: none !important;
+  }
+}
+
+/* 인쇄 시 좌측 고정 사이드바/모바일 상단바를 감추고 본문을 전체 폭으로 */
+@media print {
+  main {
+    padding-left: 0 !important;
   }
 }
 

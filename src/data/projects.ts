@@ -16,7 +16,7 @@ export type Project = {
   features: LocalizedList;
   /** Omit when there isn't a meaningful challenge to highlight for this project. */
   challenges?: LocalizedText;
-  improvements: LocalizedText;
+  improvements?: LocalizedText;
   links?: { demo?: string; repo?: string };
   /** Public path, e.g. `/projects/foo/thumb.png`. */
   thumbnail: string;
@@ -74,19 +74,19 @@ export const projects: Project[] = [
       "PowerShell",
     ],
     summary: {
-      ko: "대용량 첨부와 외부 공유를 Outlook 안에서 결재를 거쳐 끝낼 수 있게 만든 사내 애드인입니다. 메일 첨부 용량 제한(20MB)과 민감도 레이블(DRM) 때문에 직원들이 거쳐야 했던 별도 웹 서비스를 대체했고, 도입 이후 기존 레거시 웹 서비스 사용률이 10% 수준으로 떨어졌습니다.",
-      en: "An in-house Outlook add-in that routes large attachments and external sharing through an approval step, without leaving the mail client. It replaces the separate web tool employees had to use because of the 20MB attachment cap and DRM sensitivity labels, and after rollout usage of that legacy service dropped to about 10%.",
+      ko: "메일 첨부 용량 제한(20MB)과 민감도 레이블(DRM) 해제 결재를 Outlook 안에서 한 번에 처리할 수 있도록 개발한 사내 전용 애드인입니다. 기존에 직원들이 별도 웹 페이지를 오가며 처리하던 번거로운 과정을 통합했으며, 도입 후 기존 레거시 웹 서비스 사용률을 10% 수준으로 낮추고 대부분의 업무를 애드인으로 전환했습니다.",
+      en: "An in-house Outlook add-in that streamlines large attachments and DRM sensitivity label approvals directly within the mail client. It replaced the legacy web portal employees previously had to navigate around the 20MB attachment limit, reducing legacy portal usage to 10% as staff adopted the add-in.",
     },
     myRole: {
-      ko: "프론트엔드(Nuxt.js), 백엔드(Django), 배포까지 풀스택으로 담당했습니다. 기획 단계에서 놓친 결재 엣지 케이스를 발견해 모바일 결재 플로우를 직접 제안·구현했습니다.",
-      en: "Owned the whole stack, from the Nuxt.js frontend to the Django backend and deployment. I also spotted an approval edge case the spec had missed and proposed and shipped a mobile approval flow for it.",
+      ko: "Nuxt.js 기반 프론트엔드와 Django 백엔드, 배포까지 풀스택으로 개발했습니다. 기획 단계에서 고려되지 않았던 외근 및 출장자의 결재 지연 문제를 찾아내고, Teams Bot API를 활용한 모바일 원격 결재 플로우를 제안하여 구현했습니다.",
+      en: "Owned the whole stack from the Nuxt.js frontend to the Django backend and deployment. I identified an approval bottleneck for managers away from their desks and designed and shipped a mobile approval flow via the Teams Bot API.",
     },
     features: {
       ko: [
         "Outlook taskpane에서 20MB 초과 첨부 파일을 업로드하면 자동으로 링크로 변환",
         "결재가 승인되면 민감도 레이블(DRM)을 자동 해제하고 Graph API로 메일 발송",
         "PowerShell 일괄 처리 기반 다중 파일 레이블 해제",
-        "Microsoft Graph API 연동 사내 계정·메일 처리",
+        "Microsoft Graph API 연동 사내 계정 및 메일 처리",
         "Teams Bot API 기반 모바일 결재 플로우",
       ],
       en: [
@@ -98,12 +98,12 @@ export const projects: Project[] = [
       ],
     },
     challenges: {
-      ko: "결재가 승인되면 백엔드가 첨부 파일마다 PowerShell을 호출해 DRM 레이블을 해제한 뒤 Graph API로 메일을 보내는데, 파일 50개 기준 이 과정이 4~5분 걸려 승인 후에도 한참 메일이 발송되지 않았습니다. 프로세스 호출 오버헤드가 병목이라고 판단해, 레이블이 적용된 파일만 먼저 걸러낸 뒤 대상 경로를 배열로 묶어 단 1회의 PowerShell 명령으로 일괄 처리하도록 로직을 재설계했습니다. 그 결과 50개 파일 기준 처리 시간이 10초대로 줄어, 승인 직후 바로 메일이 발송되도록 만들었습니다.",
-      en: "Once an approval was granted, the backend called PowerShell once per attached file to strip its DRM label before sending through Graph API, and with 50 files that took four to five minutes, so the mail sat unsent long after approval. Identifying process-spawn overhead as the bottleneck, I filtered down to files that actually carried a label and passed their paths as one array to a single batched PowerShell command. Processing 50 files now takes about ten seconds, so the mail goes out right after approval.",
+      ko: "결재 승인 시 백엔드에서 파일마다 개별 PowerShell 프로세스를 띄워 DRM 레이블을 해제하고 Graph API로 메일을 발송하는 구조였는데, 첨부 파일이 50개에 달할 경우 처리 시간이 4~5분까지 늘어나 승인 후 메일 발송이 지연되는 문제가 있었습니다. 잦은 프로세스 생성 오버헤드가 원인임을 파악하고, 실제 레이블이 적용된 파일만 선별한 뒤 파일 경로 목록을 배열로 넘겨 1회의 PowerShell 명령으로 일괄 처리(Batch Processing)하도록 개선했습니다. 이를 통해 50개 파일 기준 처리 시간을 10초대로 대폭 단축하여 승인 즉시 메일이 발송되도록 최적화했습니다.",
+      en: "When an approval was granted, spawning an individual PowerShell process per attached file to strip DRM labels took 4–5 minutes for 50 files, causing noticeable delivery delays. Identifying process creation overhead as the bottleneck, I filtered down to files that actually carried labels and passed their paths in a single array to run as one batched PowerShell command. This cut processing time for 50 files down to ~10 seconds, enabling near-instant delivery after approval.",
     },
     improvements: {
-      ko: "상급자가 외근·출장 중이면 PC Outlook에 접근할 수 없어 결재가 멈추고 메일 발송까지 막히는 엣지 케이스를 발견했습니다. 기획에 없던 요구였지만 모바일에서 바로 확인 가능한 Teams Bot API 기반 원격 결재 플로우를 제안하고 추가 개발해, 장소와 기기에 상관없이 승인이 처리되도록 만들었습니다. 화면을 그리기 전에 '이 기능이 실제 업무 흐름의 어디에서 멈추는가'를 먼저 확인하는 습관이 생겼습니다.",
-      en: "I found an edge case where an approver away from their desk could not reach Outlook on a PC, blocking both the approval and the mail itself. It wasn't in the spec, but I proposed and built a remote approval flow on the Teams Bot API so approvals can be handled from a phone. The lesson stuck: before designing screens, find where the feature actually stalls in the real workflow.",
+      ko: "결재권자가 외근이나 출장 중일 때 사내 PC의 Outlook에 접속할 수 없어 결재가 보류되고 메일 발송 전체가 멈추는 병목 현상을 발견했습니다. 기획서에는 없던 시나리오였지만, 모바일 Teams 환경에서 즉시 결재를 처리할 수 있도록 Teams Bot API 연동 원격 승인 플로우를 선제적으로 제안하고 구축했습니다. 기능 구현에 앞서 사용자의 실제 업무 동선과 예외 상황을 먼저 검토하는 시각을 다질 수 있었습니다.",
+      en: "I noticed an operational bottleneck where approvers away from their desks could not access PC Outlook, stalling both approvals and email delivery. Even though it was not in the original spec, I proactively proposed and built a remote approval flow using the Teams Bot API so managers could review requests directly from mobile devices. This reinforced the importance of thoroughly analyzing real user workflows and edge cases before diving into implementation.",
     },
     // Internal company project, so there is no public demo or repository.
     thumbnail: "/projects/m365works/thumbnail.png",
@@ -130,12 +130,12 @@ export const projects: Project[] = [
       "Canvas API",
     ],
     summary: {
-      ko: "IP 카메라 하드웨어 안에 웹 서버를 임베딩해, HDMI·마우스 연결 없이 브라우저만으로 카메라를 설정하고 실시간·녹화 영상을 볼 수 있게 만든 임베디드 관제 웹입니다. 오래된 설정 페이지 UI를 다시 설계했고, 런칭 이후 같은 고객사의 후속 프로젝트로 이어졌습니다.",
-      en: "An embedded web UI that ships inside IP camera hardware, so the device can be configured and monitored from a browser with no HDMI or mouse attached. I redesigned the dated configuration UI, and the launch led to a follow-up project with the same client.",
+      ko: "IP 카메라 하드웨어 내부에 웹 서버를 탑재하여, 별도 HDMI 모니터나 마우스 연결 없이 웹 브라우저만으로 기기 설정 및 실시간 및 녹화 영상을 관리할 수 있도록 구축한 임베디드 관제 웹 서비스입니다. 노후화된 UI를 재설계하고 제약된 하드웨어 리소스에 최적화하여 성공적으로 런칭했으며, 고객사의 신뢰를 얻어 후속 프로젝트 개발까지 이어졌습니다.",
+      en: "An embedded web UI hosted directly inside IP camera hardware, enabling full device configuration, live streaming, and playback via web browser without external HDMI monitors or peripherals. I redesigned the legacy UI and optimized performance for constrained hardware resources, leading to follow-up project development with the same client.",
     },
     myRole: {
-      ko: "UI 설계부터 Go 웹서버, React 프론트엔드, 기기 탑재까지 1인 풀스택으로 진행했습니다.",
-      en: "Solo full-stack: UI design, the Go web server, the React frontend and getting it all onto the device.",
+      ko: "UI 설계부터 Go 웹 서버 구축, React 프론트엔드 개발, 하드웨어 기기 탑재까지 1인 풀스택으로 진행했습니다.",
+      en: "Owned solo full-stack delivery: UI/UX design, Go backend server, React frontend, and embedded on-device deployment.",
     },
     features: {
       ko: [
@@ -143,7 +143,7 @@ export const projects: Project[] = [
         "타임라인 바로 구간을 옮겨가는 녹화 영상 재생(Playback)",
         "Canvas API로 구현한 OSD 다각형 영역 편집",
         "카메라 내부에서 구동되는 Go 웹서버 기반 영상 중계",
-        "네트워크·영상·이벤트 등 카메라 설정 관리 화면",
+        "네트워크, 영상, 이벤트 등 카메라 설정 관리 화면",
       ],
       en: [
         "Live streaming for H.265, H.264 and MJPEG",
@@ -154,12 +154,12 @@ export const projects: Project[] = [
       ],
     },
     challenges: {
-      ko: "초기 Node.js(Express) 백엔드를 pkg로 크로스 컴파일하고 CRA 프론트엔드 번들(21MB)을 합치니 총 용량이 약 60MB가 되어, 기기 스토리지 제약 때문에 '탑재 불가'라는 피드백을 받았습니다. 단일 바이너리를 가볍게 뽑을 수 있는 Go로 백엔드를 전면 재작성하고, 프론트엔드는 CRA에서 Vite로 빌드 환경을 옮겨 UI 라이브러리까지 트리셰이킹되도록 조정했습니다. 최종 용량을 12MB(React 7MB + Go 5MB)로 80% 줄여 기기 탑재에 성공했습니다.",
-      en: "Cross-compiling the initial Node.js/Express backend with pkg and bundling the 21MB CRA frontend produced a ~60MB payload, too large for the device storage, and the client rejected it. I rewrote the backend in Go for a compact single binary and migrated the frontend build from CRA to Vite so even the UI library was tree-shaken. The final payload came in at 12MB (7MB React + 5MB Go), an 80% reduction, and shipped on device.",
+      ko: "초기 Node.js(Express) 백엔드를 pkg로 크로스 컴파일하고 CRA 기반 프론트엔드 번들(21MB)을 합쳤을 때 총 빌드 용량이 약 60MB에 달해, 카메라 하드웨어의 스토리지 용량 한계를 초과하여 탑재가 불가능한 문제가 발생했습니다. 단일 바이너리로 컴파일되어 런타임 오버헤드가 적은 Go 언어로 백엔드를 재설계하고, 프론트엔드는 CRA에서 Vite로 마이그레이션했습니다. 그 결과 전체 용량을 12MB(React 7MB + Go 5MB)로 80% 감축하여 기기에 탑재를 성공시켰습니다.",
+      en: "Cross-compiling the initial Node.js/Express backend with pkg alongside a 21MB CRA frontend bundle produced a ~60MB payload, which exceeded the camera's strict flash storage limits and was rejected for deployment. To resolve this, I rewrote the backend in Go to compile into a lightweight single binary and migrated the frontend build from CRA to Vite to maximize tree-shaking on UI libraries. This reduced the total footprint to 12MB (7MB React + 5MB Go)—an 80% reduction—enabling smooth on-device installation.",
     },
     improvements: {
-      ko: "반복되는 계산 로직을 함수로 따로 빼서 모아두고, 코드에 남기는 주석도 더 꼼꼼하게 쓰기 시작했습니다. 나중에 유지보수하거나 다른 사람에게 인수인계할 때 이게 큰 도움이 됐습니다. 개발이 끝났다고 손을 놓는 게 아니라, 이후에도 코드를 고치고 다른 사람이 봐도 이해할 수 있게 주석을 남기는 것까지가 개발이라는 걸 배웠습니다.",
-      en: "I started pulling repeated calculations out into their own functions and writing more thorough comments as I went. That made a real difference later, both for my own maintenance work and when handing the project off to someone else. I learned that development doesn't end at launch: keeping the code maintainable and leaving comments someone else can actually follow is part of the job too.",
+      ko: "복잡한 영상 좌표 계산과 상태 제어 로직을 순수 함수로 모듈화하고, 주요 인터페이스와 계산 알고리즘에 대한 인라인 문서를 체계적으로 정리했습니다. 1인 개발 프로젝트였음에도 추후 원활한 유지보수와 인수인계가 가능하도록 코드 가독성을 확보했으며, 개발 완료 후에도 다른 개발자가 쉽게 이해하고 확장할 수 있는 코드 구조를 고민하는 계기가 되었습니다.",
+      en: "I decoupled repetitive coordinate math and state handling into pure utility functions and documented key algorithms and interfaces. Even as a solo project, this maintainability focus paid off significantly during later handover and feature updates, demonstrating the long-term value of self-documenting code and clean abstractions.",
     },
     thumbnail: "/projects/ipc-camera/thumbnail.webp",
     images: [],
@@ -185,21 +185,21 @@ export const projects: Project[] = [
       "Notification API",
     ],
     summary: {
-      ko: "열영상 센서가 측정한 구역별 온도를 실시간으로 모아 화재 징후를 미리 알리는 24시간 관제 대시보드입니다. 현장당 최대 200여 개 센서를 다루며, 사용자가 3×3 구역별로 정한 주의·위험 임계값을 넘으면 즉시 알림을 띄웁니다.",
-      en: "A 24/7 monitoring dashboard that aggregates zone-level temperatures from thermal sensors to flag fire risk before it becomes fire. It handles up to ~200 sensors per site and alerts the moment a 3×3 zone crosses the caution or danger threshold the operator configured.",
+      ko: "열화상 센서로 수집된 온도를 실시간으로 모니터링하여 화재 징후를 감지하는 24시간 관제 대시보드입니다. 현장당 최대 200여 대의 센서 데이터를 처리하며, 구역별로 설정한 주의 및 위험 온도를 넘어가면 화면에 경고를 띄우고 브라우저 알림으로 즉시 상황을 알립니다.",
+      en: "A 24/7 industrial fire monitoring dashboard that tracks temperatures from thermal sensors in real time to detect fire risks early. It processes streams from up to ~200 sensors per site and displays on-screen warnings with browser notifications whenever a zone exceeds preset caution or danger thresholds.",
     },
     myRole: {
-      ko: "프론트엔드 웹을 단독으로 담당해 반응형 대시보드 설계·구현, MQTT 센서 통신, 온도 데이터 시각화를 맡았고, 셋탑박스 펌웨어 배포용 파일 업로드 서버(Node.js·Express)도 함께 구현했습니다.",
-      en: "Sole frontend engineer on the web client, covering responsive dashboard design and build, MQTT sensor communication and temperature visualization. I also built the Node.js/Express upload server used to distribute set-top box firmware.",
+      ko: "웹 프론트엔드를 혼자 맡아 반응형 대시보드 설계와 MQTT 실시간 센서 연동, Chart.js를 활용한 온도 시각화까지 모두 개발했습니다. 또한 셋탑박스 펌웨어 배포에 필요한 Node.js와 Express 기반 파일 업로드 서버도 함께 구축했습니다.",
+      en: "Sole frontend engineer responsible for responsive dashboard design, real-time sensor communication via MQTT, and temperature visualization using Chart.js. Also built the Node.js/Express file upload server for edge set-top box firmware distribution.",
     },
     features: {
       ko: [
-        "MQTT 기반 센서 상태·열영상 실시간 수신 (정상/주의/위험/점검)",
+        "MQTT 기반 센서 상태 및 열영상 실시간 수신 (정상, 주의, 위험, 점검)",
         "Chart.js 온도 추이 시각화와 상태 기반 우선순위 정렬",
         "Notification API를 이용한 임계값 초과 실시간 알림",
-        "QR·바코드 스캔으로 센서 및 셋탑박스 등록",
-        "그룹·권한에 따른 기능 및 화면 노출 제어",
-        "셋탑박스 펌웨어 버전 확인·다운로드 REST API",
+        "QR 및 바코드 스캔으로 센서와 셋탑박스 등록",
+        "사용자 그룹과 권한에 따른 기능 및 화면 제어",
+        "셋탑박스 펌웨어 버전 확인 및 다운로드 REST API",
       ],
       en: [
         "Real-time sensor status and thermal frames over MQTT (normal / caution / danger / check)",
@@ -211,12 +211,12 @@ export const projects: Project[] = [
       ],
     },
     challenges: {
-      ko: "24시간 띄워두는 관제실 환경에서, 실시간 열영상 프레임을 createObjectURL로 디코딩해 렌더링하다 보니 브라우저 메모리가 계속 올라가 결국 화면이 멈추는 크리티컬 이슈가 있었습니다. chrome://blob-internals/ 로 확인한 결과 프레임마다 생성된 Blob이 GC에 수거되지 않고 누적되고 있었고, 이전 프레임 렌더링 직후 URL.revokeObjectURL()로 명시적으로 해제하도록 렌더링 로직을 수정했습니다. 이후 장시간 스트리밍에서도 메모리 점유율이 일정하게 유지되는 것을 검증해, 상시 관제 환경의 안정성을 확보했습니다.",
-      en: "In a control room the dashboard stays open around the clock, and decoding live thermal frames through createObjectURL made browser memory climb until the page froze, a critical failure. chrome://blob-internals/ showed the per-frame Blobs were never being collected, so I revised the render loop to call URL.revokeObjectURL() immediately after each frame was painted. Memory then held flat across long streaming sessions, making continuous monitoring dependable.",
+      ko: "24시간 상시 가동되는 관제 환경에서 실시간 열영상 프레임을 createObjectURL로 디코딩해 렌더링하던 중, 브라우저 메모리가 지속적으로 누적되어 결국 화면이 멈추는 문제가 발생했습니다. chrome://blob-internals/를 통해 디버깅한 결과, 수신되는 프레임마다 생성된 Blob 객체가 가비지 컬렉터(GC)에 수거되지 못하고 메모리에 남아 있었습니다. 이를 해결하기 위해 이전 프레임 렌더링 직후 URL.revokeObjectURL()을 호출해 메모리를 바로 해제하도록 렌더 루프를 수정했습니다. 이후 며칠간 이어진 연속 스트리밍 테스트에서도 메모리 점유율이 일정하게 유지됨을 확인하여 관제 시스템의 연속 가동 안정성을 확보했습니다.",
+      en: "In a continuous 24/7 control-room deployment, decoding live thermal frames via createObjectURL caused browser memory to steadily climb until the tab froze. Inspecting chrome://blob-internals/ revealed that per-frame Blob references were never being garbage-collected. I resolved this by revoking prior blobs with URL.revokeObjectURL() directly after rendering each frame. Long-term stress tests confirmed memory usage stayed flat, ensuring high reliability for non-stop monitoring.",
     },
     improvements: {
-      ko: "한 달이라는 시간만 주어졌을 때는 회의보다 구현부터 서두르는 게 맞지 않을까 하는 생각이 들었습니다. 그런데 막상 짧게라도 방향을 맞추는 회의를 거치고 나니, 화면을 만들었다가 다시 갈아엎는 시행착오가 크게 줄었고 결과적으로 납기일도 맞출 수 있었습니다. 돌이켜보면 시간이 없을수록 오히려 방향을 먼저 확인하는 쪽이 더 빠른 길이었습니다.",
-      en: "With only a month to work with, my first instinct was that jumping straight into implementation would be faster than sitting in meetings. But even a short round of meetings to align on direction cut down a lot of rework from screens I would've had to redo, and it's what let us hit the deadline. Looking back, the less time you have, the more it pays to lock down direction first.",
+      ko: "한 달이라는 짧은 일정 때문에 구현부터 서두르기 쉬웠지만, 무작정 만들기보다 개발에 들어가기 전 회의를 거쳐 화면 흐름과 필요한 데이터 형태를 먼저 맞췄습니다. 요구사항과 화면 구성을 미리 맞춰둔 덕분에 중간에 화면을 다시 엎는 일 없이 정해진 일정 안에 프로젝트를 마칠 수 있었습니다.",
+      en: "Facing an aggressive one-month deadline, it was tempting to jump straight into coding. Instead, we held short alignment meetings before starting development to agree on screen flows and data structures first. Locking down requirements beforehand prevented costly UI rewrites and allowed us to finish the project right on schedule.",
     },
     thumbnail: "/projects/trusafer/thumbnail.webp",
     images: [],
@@ -243,18 +243,18 @@ export const projects: Project[] = [
       "Vue.js",
     ],
     summary: {
-      ko: "중소기업 스마트 팩토리를 위한 보급형 CPS(사이버물리시스템) 기반 생산 현장 원격 모니터링 플랫폼입니다. IP 카메라로 설비 계측기의 디지털·아날로그 수치를 비접촉 인식하고, 설비 상태와 현장 영상을 한 화면에서 관제하며 생산 병목과 생산량을 분석합니다. 소프트웨어 품질 인증인 GS 인증 1등급을 획득했습니다.",
-      en: "An affordable CPS (cyber-physical system) platform for remote monitoring of production floors at small and mid-sized smart factories. IP cameras read digital and analog gauges without contact, and a single console combines equipment status with live floor video to analyze bottlenecks and forecast output. The platform earned a GS Certification Grade 1 for software quality.",
+      ko: "중소기업 제조 현장을 위한 실시간 원격 모니터링 플랫폼입니다. IP 카메라로 설비 계측기의 수치를 자동 인식하고, 현장 영상과 설비 가동 상태를 한 화면에서 확인하며 생산 병목과 생산량을 분석합니다. 소프트웨어 품질 인증인 GS 인증 1등급을 획득했습니다.",
+      en: "A real-time remote monitoring platform for smart factory floors in small and medium-sized manufacturing facilities. IP cameras automatically read machine gauges, while a single dashboard integrates live video feeds and operating statuses to analyze production bottlenecks and output. The platform achieved GS Certification Grade 1.",
     },
     myRole: {
-      ko: "프론트엔드 단독 담당자로 아키텍처 설계부터 대시보드 구현, 인증 서버 연동, Docker 기반 배포까지 맡았습니다. DFS 기반 공정 조건 최적화 알고리즘도 직접 설계·구현해 KTR 소프트웨어 시험을 통과했습니다.",
-      en: "Sole frontend owner, covering architecture, dashboard implementation, auth server integration and Docker-based deployment. I also designed and implemented the DFS-based process optimization algorithm, which passed an accredited KTR software test.",
+      ko: "프론트엔드 개발을 혼자 맡아 대시보드 화면 설계부터 인증 서버 연동, Docker 배포까지 전체를 개발했습니다. 추가로 DFS 알고리즘을 활용한 공정 조건 최적화 로직도 직접 작성해 공인 소프트웨어 시험(KTR)을 통과했습니다.",
+      en: "Sole frontend engineer on the project, handling everything from dashboard UI design to auth server integration and Docker deployment. Also wrote the DFS-based process parameter optimization logic and passed accredited KTR software testing.",
     },
     features: {
       ko: [
         "설비 상태와 생산 현황을 통합한 원격 관제 대시보드",
         "MQTT 기반 대규모 시계열 데이터 실시간 처리",
-        "ffmpeg·RTSP 중계를 통한 현장 영상 스트리밍",
+        "ffmpeg 및 RTSP 중계를 통한 현장 영상 스트리밍",
         "Chart.js 기반 생산 병목 분석 및 생산량 예측 시각화",
         "DFS 알고리즘을 이용한 공정 조건 최적화",
         "사용자 인증 서버 연동 및 Docker 기반 웹 배포",
@@ -269,12 +269,12 @@ export const projects: Project[] = [
       ],
     },
     challenges: {
-      ko: "프로젝트는 Vue 3로 시작했지만, 당시 Composition API 생태계가 불안정하고 복잡한 관제 UI에 참고할 레퍼런스가 부족해 기능 하나를 붙일 때마다 일정이 밀렸습니다. 지연의 원인이 개인 역량이 아니라 스택 선택에 있다고 판단해 React + TypeScript 아키텍처로의 전환을 팀에 제안하고 주도했고, 기존 Vue 코드를 React Custom Hook으로 추상화해 비즈니스 로직과 UI 컴포넌트를 분리하며 단계적으로 옮겼습니다. 전환 이후 개발 속도가 올라가고 트러블슈팅 시간이 크게 줄어 기한 내 납품했으며, GS 인증 1등급을 받을 수준의 안정성을 확보했습니다.",
-      en: "The project started on Vue 3, but the Composition API ecosystem was still unsettled and there were few references for complex monitoring UIs, so every feature slipped the schedule. Concluding the delay came from the stack rather than the team, I proposed and led a migration to React + TypeScript, porting incrementally by abstracting the existing Vue code into React custom hooks that separated business logic from UI components. Delivery speed recovered, troubleshooting time dropped sharply, and we shipped on schedule at a quality level that passed GS Certification Grade 1.",
+      ko: "처음에는 Vue 3로 개발을 시작했으나, 당시에는 참고할 만한 자료나 관련 라이브러리가 부족해 복잡한 관제 화면을 만들 때마다 일정이 계속 지연되었습니다. 문제를 해결하려면 라이브러리 생태계가 넓고 타입 안정성이 높은 React와 TypeScript로 바꾸는 것이 낫다고 판단해 팀에 전환을 제안했습니다. 기존 화면을 점차 옮겨가면서 반복되는 데이터 처리 로직은 커스텀 훅으로 분리해 정리했습니다. 기술 스택을 바꾼 뒤 개발 속도와 버그 해결이 훨씬 빨라졌고, 정해진 기한 내에 안정적으로 납품하며 GS 인증 1등급까지 받을 수 있었습니다.",
+      en: "We initially started development on Vue 3, but a lack of production-ready references and libraries at the time caused persistent delays whenever we added complex monitoring views. Realizing a mature ecosystem was needed, I proposed migrating to React and TypeScript. As we ported screens incrementally, I separated reusable data-handling logic into custom hooks. The migration significantly accelerated development and debugging, allowing us to deliver on schedule and secure GS Certification Grade 1.",
     },
     improvements: {
-      ko: "Chart.js로 실시간 데이터를 그리면서, '얼마나 자주, 얼마나 많이 보여줄 것인가'가 프론트엔드만의 문제가 아니라는 걸 알게 됐습니다. 백엔드 팀원과 DB에 어느 범위까지 보관하고 어떤 단위로 집계해 내려줄지 먼저 합의한 뒤 화면을 만들면서, 불필요한 데이터 왕복과 재작업이 눈에 띄게 줄었습니다. 영상 처리에서도 rtsp-relay 같은 기성 라이브러리보다 ffmpeg를 직접 다루는 편이 요구사항 변경에 훨씬 유연했습니다. 한편 디자이너 없이 19개월간 UI를 끌고 가며 공통 컴포넌트와 디자인 기준을 먼저 세워야 한다는 것도 체감했습니다.",
-      en: "Rendering live data with Chart.js made it clear that 'how often and how much to show' is not a frontend-only decision. Agreeing with the backend team on retention windows and aggregation granularity before building the screens cut out a lot of redundant round trips and rework. For video, working directly with ffmpeg proved far more adaptable to changing requirements than an off-the-shelf wrapper like rtsp-relay. Carrying the UI for 19 months without a designer also taught me to establish shared components and design rules early.",
+      ko: "대량의 실시간 데이터를 Chart.js로 그리다 보니 화면이 버벅거리는 문제가 있었습니다. 단순히 프론트엔드에서만 해결할 문제가 아니라고 판단해, 백엔드 팀원과 함께 DB 저장 단위와 데이터 전달 주기를 먼저 상의하고 맞추면서 불필요한 데이터 전송과 재작업을 크게 줄였습니다. 영상 스트리밍도 기존 라이브러리에 의존하기보다 ffmpeg로 직접 다루면서 현장 요구사항에 맞춰 훨씬 수월하게 대응할 수 있었습니다. 특히 디자이너 없이 19개월간 혼자 화면을 만들다 보니, 초기에 공통 컴포넌트와 화면 기준을 제대로 세워두는 것이 얼마나 중요한지 크게 느꼈습니다.",
+      en: "Rendering high-frequency live data with Chart.js initially caused UI lag. Seeing this wasn't just a frontend issue, I worked with the backend team to align database storage intervals and data transmission frequencies beforehand, significantly cutting down unnecessary network traffic and rework. Handling video streaming directly with ffmpeg rather than pre-built wrappers also gave us the flexibility to adapt easily to changing on-site requirements. Building the UI alone for 19 months without a designer taught me firsthand how essential it is to establish shared components and design rules early on.",
     },
     thumbnail: "/projects/plandy/thumbnail.webp",
     images: [],
@@ -300,21 +300,21 @@ export const projects: Project[] = [
       "Playwright",
     ],
     summary: {
-      ko: "수학 문제집 사진에서 텍스트와 수식(LaTeX)을 AI로 추출해 편집하고, A4 2단 시험지 PDF와 편집 가능한 한글(.hwpx) 문서로 내보내는 Windows 데스크톱 앱입니다. Python·Node.js 설치 없이 더블클릭만으로 실행되는 단일 실행 파일로 배포하며, 학원 강사인 여자친구가 실제 수업 자료 제작에 쓰고 있습니다.",
-      en: "A Windows desktop app that extracts text and LaTeX formulas from photos of math workbooks, lets you edit them, and exports either a two-column A4 PDF or an editable HWPX (Korean word processor) document. It ships as a single double-click executable with no Python or Node.js required, and my girlfriend, who works as an academy instructor, uses it to build real lesson materials.",
+      ko: "수학 문제집 사진에서 문제 텍스트와 수식(LaTeX)을 AI로 추출해 편집하고, A4 2단 시험지 형태의 PDF 및 편집 가능한 한글(.hwpx) 문서로 내보내는 Windows 데스크톱 앱입니다. Python이나 Node.js 같은 별도 런타임 설치 없이 더블클릭만으로 동작하는 단일 실행 파일로 배포했으며, 학원 강사인 실사용자가 실제 수업용 시험지 제작에 매주 사용하고 있습니다.",
+      en: "A Windows desktop application that extracts math problems and LaTeX equations from workbook photos via AI OCR, enables WYSIWYG editing, and exports clean two-column A4 test sheets as PDFs and fully editable Hangul (.hwpx) documents. Shipped as a standalone double-clickable binary with zero external dependencies, it is actively used by a math instructor to produce real classroom materials.",
     },
     myRole: {
-      ko: "기획·개발·패키징·배포를 1인으로 진행하고 있으며, 실사용자 피드백을 받아 편집기 UX를 반복 개선하고 있습니다.",
-      en: "Solo project covering planning, development, packaging and distribution, with the editor UX iterated on real user feedback.",
+      ko: "기획부터 프론트엔드 개발, AI API 연동, 데스크톱 앱 패키징 및 배포까지 1인으로 진행했으며, 실사용자의 작업 피드백을 바탕으로 편집기 UX를 지속적으로 개선하고 있습니다.",
+      en: "Sole developer across product design, desktop frontend, Gemini API integration, and electron-builder packaging, iteratively improving editor ergonomics from live user feedback.",
     },
     features: {
       ko: [
-        "사진 한 장에서 여러 문제와 수식·보기·그림 자리를 구조화해 추출하는 Gemini API 기반 OCR",
+        "사진 한 장에서 여러 문제와 수식, 보기, 그림 영역을 구조화해 추출하는 Gemini API 기반 OCR",
         "MathLive 시각 편집기와 한국 교육과정 수식 팔레트 (LaTeX 몰라도 입력 가능)",
         "블록 드래그 재정렬 기반 문제 편집기와 수동 크롭",
         "가상 A4 뷰어로 미리 보고 그대로 출력하는 2단 PDF 내보내기",
         "한글에서 바로 수정 가능한 .hwpx 내보내기 (네이티브 수식 변환)",
-        "자동 저장·복구",
+        "자동 저장 및 복구 기능",
       ],
       en: [
         "Gemini-powered OCR that splits one photo into multiple problems with formulas, choices and figure slots",
@@ -324,14 +324,6 @@ export const projects: Project[] = [
         "HWPX export that stays editable in the Korean word processor, with native formulas",
         "Autosave and crash recovery",
       ],
-    },
-    challenges: {
-      ko: "@media print로 곧장 출력하면 문제가 단이나 페이지 경계에서 잘렸고, 사용자는 인쇄 버튼을 누르기 전까지 결과를 알 수 없었습니다. 화면에 실제 A4 크기의 가상 뷰어를 렌더링해 배치를 미리 확인하게 하고, 동일한 구조를 그대로 printToPDF로 출력하도록 파이프라인을 하나로 통일했습니다. 문제 단위 높이를 계산해 경계에서 자동으로 다음 단·페이지로 넘기도록 만들어, 미리보기와 출력물이 어긋나는 일을 없앴습니다.",
-      en: "Printing straight through @media print sliced problems in half at column and page boundaries, and users only found out after hitting print. I rendered a virtual A4 viewer on screen so the layout is visible beforehand, then unified the pipeline so printToPDF outputs that exact structure. Measuring each problem's height and pushing it to the next column or page when it doesn't fit removed the gap between preview and output entirely.",
-    },
-    improvements: {
-      ko: "수식을 이미지로 붙이면 한글에서 고칠 수 없어 사용자가 결국 다시 타이핑해야 했습니다. LaTeX를 한글 수식 편집기 스크립트로 변환해 HWPX(OWPML) 문서를 직접 생성하도록 만들어, 문서를 열고 더블클릭하면 바로 편집되는 네이티브 수식으로 넣었습니다. 무료 API 한도에 걸려 작업이 끊기던 문제도 키를 여러 개 등록해 자동 전환하도록 해결했습니다. 실사용자가 바로 옆에 있으니 '되는 기능'과 '쓸 만한 기능'의 차이를 매번 확인하며 만들 수 있었습니다.",
-      en: "Formulas pasted as images can't be fixed inside the word processor, so users ended up retyping them. I converted LaTeX into the processor's own equation script and generated the HWPX (OWPML) file directly, so a double-click opens a native, editable formula. Hitting the free API quota mid-session was solved by registering multiple keys and rotating automatically. Having a real user beside me kept the difference between 'it works' and 'it's usable' impossible to ignore.",
     },
     // Personal project, not published.
     thumbnail: "/projects/make-pro/thumbnail.png",
@@ -359,21 +351,21 @@ export const projects: Project[] = [
       "Oracle Cloud",
     ],
     summary: {
-      ko: "선생님이 작성한 월별 학습 리포트를 학부모가 확인하는 학원용 알림장 서비스입니다. 수업 내용을 카카오톡으로 주고받다 보니 개인 대화에 묻혀 다시 찾아보기 어렵던 문제에서 출발했고, 선생님은 학생별·월별 알림장을 관리하고 학부모는 전달받은 계정으로 로그인해 자녀의 학습 리포트를 확인합니다. 오라클 클라우드와 가비아 도메인으로 직접 배포해 2024년부터 지금까지 약 20명의 실사용자가 쓰고 있습니다.",
-      en: "An academy notes service where parents read a monthly learning report written by the instructor. Lesson notes used to be sent over KakaoTalk, where they got buried in personal chat and became impossible to look back on; now the instructor manages notes per student and per month, and parents log in with an issued account to read their child's report. Deployed on Oracle Cloud with a Gabia domain, it has been running since 2024 with about 20 active users.",
+      ko: "선생님이 작성한 월별 학습 리포트를 학부모가 확인할 수 있는 학원용 알림장 서비스입니다. 기존에는 수업 피드백을 카카오톡으로 전달하다 보니 개인 대화에 묻혀 지난 알림장을 다시 찾기 어려웠습니다. 이를 해결하기 위해 선생님은 학생별, 월별 알림장을 등록 및 관리하고, 학부모는 발급받은 계정으로 로그인해 자녀의 학습 리포트를 쉽게 열람할 수 있도록 웹 서비스를 구축했습니다. Oracle Cloud와 개인 도메인으로 배포해 2024년부터 현재까지 약 20명의 실제 사용자가 이용하고 있습니다.",
+      en: "A dedicated academy notes web service where parents can access monthly student learning reports published by instructors. Previously, progress updates were shared via KakaoTalk chat, where they frequently got buried in personal messages and became difficult to reference. To solve this, I built a web app where instructors easily manage records per student and month, and parents securely log in to read reports. Hosted on Oracle Cloud with a custom domain, it has maintained ~20 active users since 2024.",
     },
     myRole: {
-      ko: "기획, 프론트엔드, 백엔드, 배포·운영까지 1인으로 담당하고 있으며, 실사용자 요청을 받아 지금도 유지보수하고 있습니다.",
-      en: "Solo across planning, frontend, backend, deployment and operations, and still maintained today from real user requests.",
+      ko: "기획부터 프론트엔드, 백엔드, 인프라 배포 및 실제 운영까지 1인으로 진행했으며, 실제 피드백을 반영하며 현재도 지속적으로 유지보수하고 있습니다.",
+      en: "Sole engineer managing product requirements, frontend, backend API, infrastructure, and ongoing maintenance driven by user requests.",
     },
     features: {
       ko: [
         "학생 등록과 월별 알림장 작성을 처리하는 관리자 페이지",
-        "회원가입 없이 관리자가 계정을 생성·배포하는 로그인 구조",
+        "회원가입 없이 관리자가 계정을 생성해 발급하는 로그인 구조",
         "월 단위로 정리된 학부모용 알림장 열람 화면 (반응형)",
         "로그인 시도 제한, JWT 토큰 로테이션, XSS 새니타이징을 적용한 인증 보안",
         "주 1회 DB 자동 백업과 백업 파일 이메일 발송",
-        "휴면 계정·계정 삭제 등 운영용 기능",
+        "휴면 계정과 계정 삭제 등 운영 기능",
       ],
       en: [
         "Admin pages for registering students and writing monthly notes",
@@ -385,12 +377,12 @@ export const projects: Project[] = [
       ],
     },
     challenges: {
-      ko: "학부모 중에는 회원가입 절차 자체를 부담스러워하는 분이 많아, 일반적인 가입 플로우를 그대로 두면 서비스가 아예 쓰이지 않을 위험이 있었습니다. 가입 단계를 없애고 관리자가 계정을 만들어 전달하는 구조로 바꾼 뒤, 접속 주소도 학부모가 알아보기 쉽도록 한글 URL로 정리했습니다. 그 결과 별도 사용법 안내 없이도 로그인 단계에서 이탈하는 사례가 사라졌고, 2024년 초 오픈 이후 약 20명의 사용자가 이탈 없이 계속 사용하고 있습니다.",
-      en: "Many parents find sign-up forms intimidating, and a conventional registration flow risked the service simply going unused. I removed registration entirely, so the instructor creates accounts and hands them over, and switched the address to a Korean-language URL that parents could read at a glance. Drop-off at the login step disappeared without any usage guide, and the roughly 20 users onboarded since early 2024 are still active.",
+      ko: "학부모 입장에서 회원가입 절차가 번거로우면 서비스를 시작조차 하지 않을 수 있었습니다. 이를 해결하기 위해 직접 가입하는 과정을 없애고, 선생님이 학생을 등록하면 계정을 발급해 전달하는 방식으로 설계했습니다. 접속 주소도 누구나 쉽게 기억하고 들어올 수 있도록 한글 도메인으로 맞췄습니다. 그 결과 별도로 사용법을 안내하지 않아도 학부모들이 어려움 없이 로그인할 수 있었고, 2024년 초 오픈 이후 지금까지 약 20명의 학부모가 매달 자녀의 알림장을 확인하고 있습니다.",
+      en: "A standard sign-up form could have felt tedious or confusing for parents, preventing them from using the service altogether. To make access effortless, I removed self-registration entirely; instructors generate accounts and hand them over directly. I also set up a memorable Korean domain so parents could open the site without confusion. As a result, parents were able to log in without needing any user guide, and about 20 parents have been actively reading monthly reports since early 2024.",
     },
     improvements: {
-      ko: "무료 등급 오라클 클라우드에서 운영하다 보니 인스턴스 장애가 곧 데이터 유실로 이어질 수 있다는 점이 가장 큰 리스크였습니다. 주 1회 SQL 백업 파일을 생성해 개인 이메일로 자동 발송하도록 만들어, 서버가 사라져도 복구 가능한 상태를 유지하고 있습니다. 2년 넘게 운영하면서 보안 요구도 계속 늘어나, 초기 Express·Sequelize 서버를 NestJS·TypeORM 기반으로 다시 짜고 로그인 시도 제한, JWT 토큰 로테이션, XSS 새니타이징, 구조화된 로그(Winston)를 차례로 추가했습니다. 만들고 끝나는 프로젝트와 달리 계속 운영하다 보니, 화면에 드러나지 않는 보안·로깅 같은 기능이 왜 먼저 필요한지 체감했습니다.",
-      en: "Running on Oracle Cloud's free tier, the biggest risk was that losing the instance would mean losing the data. A weekly SQL dump is generated and emailed to me automatically, so the service stays recoverable even if the server disappears. Over more than two years of running it, security requirements kept growing, so I rewrote the original Express/Sequelize backend on NestJS and TypeORM and added login rate limiting, JWT token rotation, XSS sanitization, and structured logging with Winston along the way. Operating it continuously, rather than shipping and walking away, showed me why invisible work like security and logging has to come early.",
+      ko: "오라클 클라우드 프리티어 환경에서 발생할 수 있는 인스턴스 중단 및 데이터 유실 리스크에 대비해, 매주 DB 백업 파일을 생성해 개인 이메일로 자동 전송하는 백업 파이프라인을 구축했습니다. 2년 넘게 실서비스로 운영하면서 증가하는 보안 및 안정성 요구사항에 대응하기 위해, 초기 Express와 Sequelize 서버를 NestJS와 TypeORM 기반으로 리팩토링했습니다. 이 과정에서 로그인 무차별 대입 방지(Rate Limiting), JWT 토큰 로테이션, XSS 방지 새니타이징, Winston 기반 구조화 로깅을 단계적으로 도입하여 보이지 않는 백엔드 인프라의 견고함을 확보했습니다.",
+      en: "Operating on Oracle Cloud's free tier posed a risk of data loss should an instance terminate unexpectedly. I mitigated this by building an automated weekly database dump emailed off-site. Over two years of live operations, evolving security requirements prompted a rewrite from Express/Sequelize to NestJS and TypeORM, incorporating rate limiting, JWT token rotation, XSS sanitization, and structured logging with Winston to bolster system reliability and defense-in-depth.",
     },
     thumbnail: "/projects/tutoring-notice/thumbnail.webp",
     images: [],
@@ -415,12 +407,12 @@ export const projects: Project[] = [
       "Apache",
     ],
     summary: {
-      ko: "충남대학교 산학협력단이 정보통신응용기술개발지원사업 참여 기업 300여 곳을 대상으로 진행하던 설문을 온라인화한 산학협력 과제용 설문 시스템입니다. 구글 설문으로는 불가능했던 기업별 접근 제어와 통계 추출 요구를 충족하도록 직접 구축했고, 2024년에 같은 의뢰자에게 재의뢰를 받아 연도별 버전으로 확장했습니다.",
-      en: "An online replacement for a paper survey run across ~300 companies in a national ICT R&D support program, commissioned by the Chungnam National University industry-academic cooperation foundation. Google Forms couldn't provide the per-company access control or the statistics they needed, so I built it from scratch, and the same client came back in 2024 to extend it into per-year editions.",
+      ko: "충남대학교 산학협력단이 지원사업 참여 기업 300여 곳을 대상으로 진행하던 대면 및 서면 설문을 온라인화한 시스템입니다. 구글 설문 폼으로는 불가능했던 기업별 개별 접근 제어와 결과 통계 엑셀 추출 요구를 충족하도록 자체 구축했으며, 초기 시스템을 성공적으로 납품한 뒤 2024년 동일 의뢰처로부터 연도별 확장 버전 개발을 다시 의뢰받아 진행했습니다.",
+      en: "An online survey platform developed for the Chungnam National University Industry-Academic Cooperation Foundation, replacing manual paper surveys across ~300 ICT R&D beneficiary companies. Custom-built to provide enterprise-level access controls and custom statistical Excel exports not feasible with Google Forms, its success led to being re-commissioned in 2024 to support multi-year recurring editions.",
     },
     myRole: {
-      ko: "풀스택 개발과 배포를 담당했고, 기획·테스트를 맡은 팀원 1명과 함께 진행했습니다.",
-      en: "Full-stack development and deployment, working alongside one teammate who handled planning and testing.",
+      ko: "기획부터 풀스택 웹 개발, 배포까지 직접 진행했으며, 테스트를 담당한 팀원 1명과 협업하여 프로젝트를 완성했습니다.",
+      en: "Led planning, full-stack web development, and deployment, collaborating with one teammate who focused on testing.",
     },
     features: {
       ko: [
@@ -440,13 +432,9 @@ export const projects: Project[] = [
         "Separate domains per survey year (2023 / 2024)",
       ],
     },
-    challenges: {
-      ko: "300여 개 기업이 각자의 응답만 볼 수 있어야 했지만, 기업마다 계정을 발급하면 참여 부담이 커져 응답률이 떨어질 수 있었습니다. 기업별로 암호화한 고유 URL을 발급하고 비밀번호를 덧붙이는 방식으로 접근을 제어해, 링크 하나로 바로 참여하면서도 다른 기업의 응답은 열람할 수 없게 만들었습니다. 문항마다 값의 형태(문자/숫자)가 뒤섞이는 문제도 TypeScript로 응답 스키마를 타입으로 고정해 집계 단계의 실수를 미리 차단했습니다.",
-      en: "Each of ~300 companies had to see only its own answers, but issuing individual accounts would have added friction and hurt the response rate. I generated an encrypted per-company URL and paired it with a password, so a single link gets a respondent straight in while keeping other companies' answers out of reach. Mixed value types across questions (text vs. number) were pinned down by typing the response schema in TypeScript, catching aggregation mistakes before they shipped.",
-    },
     improvements: {
-      ko: "처음 맡은 외주 성격의 프로젝트라 신경 써서 구현했다고 생각했지만, 테스트 단계에서 예상보다 많은 버그가 나왔습니다. 이후로는 기능을 만들면서 엣지 케이스 목록을 먼저 정리하고 하나씩 검증하는 습관을 들였습니다. 제가 자리를 비운 동안 팀원이 의뢰자와 소통해 '구현할 것과 하지 않을 것'을 정리해 준 덕분에 범위가 흔들리지 않았던 점도 컸고, 요구사항을 문서로 고정해 두는 일의 가치를 배웠습니다. 2024년에는 같은 의뢰자에게 재의뢰를 받아 연도별 필수 문항 로직을 추가하며 서비스를 확장했습니다.",
-      en: "It was my first client-style project and I thought I'd been careful, but testing surfaced more bugs than expected. Since then I list edge cases alongside the feature itself and verify them one by one. Scope also held steady because my teammate kept talking to the client while I was away, keeping a clear record of what was in and out. That is where I learned the value of writing requirements down. In 2024 the same client came back, and I extended the service with per-year required-question logic.",
+      ko: "주관식 텍스트와 숫자 등 문항마다 응답 형태가 달라 집계할 때 헷갈리기 쉬웠는데, TypeScript로 타입을 정의해 데이터 오류를 방지했습니다. 테스트 과정에서 마주한 예외 상황들을 꼼꼼히 검증하며 시스템을 다듬었고, 의뢰처와 구현 범위를 미리 조율하며 안정적으로 납품했습니다. 이러한 신뢰를 바탕으로 2024년에도 연도별 필수 문항 로직을 추가하는 후속 개발을 성공적으로 마쳤습니다.",
+      en: "Because survey questions mixed text and numeric inputs, handling different data types could easily lead to confusion; defining types with TypeScript kept the response data reliable. Thoroughly addressing edge cases during testing and aligning on project scope with the client ensured on-time delivery. Building this trust led to successfully expanding the platform in 2024 with year-specific question logic.",
     },
     thumbnail: "/projects/survey/thumbnail.webp",
     images: [],
@@ -472,19 +460,19 @@ export const projects: Project[] = [
       "Slack",
     ],
     summary: {
-      ko: "사내에서 쓰던 근태 서비스가 유료로 전환되면서, 엑셀 관리로 되돌아가는 대신 직접 만든 무료 휴가 관리 시스템입니다. 입사일 기준 연차 개수 자동 산정부터 팀 전체 휴가 캘린더, Slack 알림까지 팀이 실제로 쓰던 기능만 담았습니다.",
-      en: "An in-house time-off system I built as a free replacement when the tool we had been using moved to a paid tier, so the team would not fall back to spreadsheets. It covers exactly what the team actually used: leave entitlement computed from the hire date, a shared calendar, and Slack notifications.",
+      ko: "사내 근태 관리 솔루션이 유료화되면서 다시 엑셀로 관리해야 하는 불편함을 줄이고자 만든 연차 관리 웹 서비스입니다. 입사일 기준 연차 자동 계산, 팀 공유 캘린더, Slack 연동 등 사내에서 바로 필요한 기능 위주로 구성했습니다.",
+      en: "An internal time-off management web service built when our prior commercial solution turned paid, replacing manual spreadsheet tracking. It focuses on essential company needs: an API calculating leave by tenure based on labor law, a shared team calendar, and Slack notifications.",
     },
     myRole: {
-      ko: "DB 설계부터 백엔드 API, 프론트엔드, 사내망 배포까지 1인으로 진행했습니다.",
-      en: "Solo across schema design, backend APIs, frontend and deployment on the internal network.",
+      ko: "DB 설계부터 백엔드 API, 프론트엔드, 사내망 배포까지 혼자 진행했습니다.",
+      en: "Solo development across schema design, backend APIs, frontend, and internal network deployment.",
     },
     features: {
       ko: [
         "근로기준법 기준 근속 기간별 연차 개수 자동 산정 API",
         "FullCalendar 기반 팀 전체 휴가 현황 캘린더",
         "연차 사용 시 Slack 채널 자동 알림",
-        "연차 외 경조사·예비군·여름휴가까지 유형별 관리",
+        "연차 외 경조사, 예비군, 여름휴가 등 유형별 관리",
         "연차 히스토리 테이블 설계와 주 1회 자동 백업",
         "모바일까지 대응하는 반응형 UI",
       ],
@@ -498,8 +486,8 @@ export const projects: Project[] = [
       ],
     },
     improvements: {
-      ko: "프론트와 백엔드를 혼자 맡다 보니 설계에는 시간이 오래 걸렸습니다. 다만 구현 도중 API 응답 형태를 더 나은 쪽으로 바꾸고 싶을 때 바로 고쳐볼 수 있었던 경험 덕분에, 이후 팀으로 협업하는 프로젝트에서도 프론트와 백엔드가 데이터 형태를 미리 맞춰두는 게 왜 중요한지 체감할 수 있었습니다.",
-      en: "Owning both the frontend and backend meant design took longer on my own. But being able to adjust the API response shape the moment I saw a better fit taught me why agreeing on the data contract between frontend and backend up front matters, especially on projects where I'm working with a team.",
+      ko: "DB 설계부터 백엔드 API와 프론트엔드까지 혼자 개발하다 보니, 화면을 만들면서 필요한 데이터 형태가 있으면 대기 시간 없이 API를 바로 수정하며 속도를 낼 수 있었습니다. 프론트엔드가 화면을 그릴 때 어떤 데이터 구조를 받아야 다루기 편한지 직접 겪어봤기 때문에, 이후 백엔드 개발자와 협업할 때도 서로 다루기 편한 API 구조를 먼저 제안하고 조율하는 계기가 되었습니다.",
+      en: "Handling both backend and frontend development allowed me to immediately adjust API response structures to fit UI requirements without waiting on external handoffs. Experiencing firsthand what data structures make frontend rendering simpler also helped me propose and coordinate clean, intuitive API contracts when collaborating with backend teams later.",
     },
     thumbnail: "/projects/annual-leave/thumbnail.png",
     images: [],
@@ -515,16 +503,16 @@ export const projects: Project[] = [
     teamSize: 1,
     stack: ["Vue.js", "JavaScript", "Canvas API"],
     summary: {
-      ko: "YOLO 학습 데이터셋을 만들 때 필요한 바운딩 박스 좌표를, 설치 없이 브라우저에서 바로 얻을 수 있게 만든 사내 라벨링 툴입니다. 로컬 이미지를 올리고 박스를 그리면 좌표를 그대로 복사해 쓸 수 있습니다.",
-      en: "An in-house labeling tool that produces the bounding-box coordinates a YOLO training set needs, straight in the browser with nothing to install. Drop in a local image, draw the boxes, copy the coordinates out.",
+      ko: "YOLO 객체 검출 모델 학습에 필요한 바운딩 박스 좌표 데이터를 별도 소프트웨어 설치 없이 브라우저에서 추출할 수 있는 사내용 웹 라벨링 툴입니다. 로컬 이미지를 불러와 마우스 드래그로 영역을 지정하면 정규화된 좌표 데이터를 복사해 학습 데이터셋으로 바로 활용할 수 있습니다.",
+      en: "An internal web-based tool for labeling YOLO object detection datasets directly in the browser without installing software. Users load local images, draw bounding boxes, and copy normalized coordinates for immediate use in training datasets.",
     },
     myRole: {
-      ko: "프론트엔드 1인 개발로 Canvas 렌더링과 단축키 인터랙션을 직접 설계·구현했습니다.",
-      en: "Solo frontend build, covering Canvas rendering and the keyboard-driven interaction model.",
+      ko: "프론트엔드 1인 개발로 Canvas 렌더링과 단축키 조작 로직을 직접 구현했습니다.",
+      en: "Solo frontend development covering Canvas rendering and keyboard shortcut interactions.",
     },
     features: {
       ko: [
-        "Canvas 기반 바운딩 박스 그리기·이동·크기 조절·삭제",
+        "Canvas 기반 바운딩 박스 생성, 이동, 크기 조절, 삭제",
         "W(그리기) / ESC(이동) 단축키로 모드 전환",
         "선택한 박스의 좌표를 클립보드로 복사",
         "박스별 색상 변경과 이미지 위 표시/숨김 토글",
@@ -537,12 +525,12 @@ export const projects: Project[] = [
       ],
     },
     challenges: {
-      ko: "Canvas에는 도형 히트 테스트나 리사이즈 핸들 같은 편집 기능이 전혀 없어, 박스를 클릭하고 옮기고 크기를 바꾸는 동작을 좌표 계산부터 직접 구현해야 했습니다. 종이에 박스와 핸들의 좌표 관계를 그려가며 마우스 위치가 어느 영역에 속하는지 판정하는 로직을 정리했고, 그리기 모드와 이동 모드를 단축키로 분리해 조작이 서로 충돌하지 않게 했습니다. 결과적으로 마우스와 키보드만으로 라벨링을 끝낼 수 있는 흐름을 만들었습니다.",
-      en: "Canvas gives you no hit testing and no resize handles, so clicking, dragging and resizing a box all had to be written from the coordinate math up. I worked the box-and-handle geometry out on paper to decide which region a pointer belongs to, and split drawing and moving into separate keyboard-triggered modes so the two never fight each other. The result is a labeling loop that never leaves the mouse and keyboard.",
+      ko: "HTML5 Canvas는 DOM 요소와 달리 개별 도형에 이벤트를 붙이거나 크기를 조절하는 기능이 없어, 마우스 좌표 판정과 영역 이동 및 리사이즈 로직을 직접 구현해야 했습니다. 모서리 핸들과 사각형 영역 안으로 마우스가 들어왔는지 계산하는 로직을 일일이 종이에 그려가며 작성했고, W(그리기)와 ESC(선택/이동) 단축키로 모드를 분리해 마우스 조작이 겹치지 않게 정리했습니다. 덕분에 버튼을 일일이 누르지 않고 키보드와 마우스만으로 빠르게 라벨링을 진행할 수 있었습니다.",
+      en: "HTML5 Canvas does not provide native event listeners or resize handles for drawn shapes, requiring all hit-testing, dragging, and corner resizing to be calculated directly from coordinates. I worked through coordinate calculations for boundary and handle detection, and separated drawing and selection modes with W and ESC keys to prevent overlapping interactions. This allowed smooth, rapid labeling using just the keyboard and mouse.",
     },
     improvements: {
-      ko: "다 만들고 나서야 이미 성숙한 오픈소스 라벨링 툴이 있다는 걸 알았습니다. 이후로는 구현 전에 기존 솔루션부터 조사하게 됐지만, 이 프로젝트에서 익힌 Canvas 좌표계와 이벤트 처리는 그대로 남아 IPC의 OSD 다각형 편집과 TRUSafer의 열영상 렌더링을 구현할 때 바로 쓸 수 있었습니다.",
-      en: "I only discovered the mature open-source labeling tools after finishing this one, which is why I now survey existing solutions before building. The Canvas coordinate math and event handling stuck around, though: both went straight into the OSD polygon editor in IPC and the thermal-frame rendering in TRUSafer.",
+      ko: "개발을 마친 뒤 이미 완성도 높은 오픈소스 라벨링 도구들이 많다는 사실을 알게 되어, 기능을 만들기 전에 기존 솔루션이나 라이브러리를 먼저 충분히 찾아보는 계기가 되었습니다. 하지만 Canvas 2D에서 마우스 좌표 판정과 그래픽 변환을 바닥부터 직접 다뤄본 경험 덕분에, 이후 IPC 카메라의 OSD 다각형 편집기와 TRUSafer의 실시간 영상 렌더링 같은 캔버스 그래픽 기능들을 수월하게 구현할 수 있었습니다.",
+      en: "After finishing development, I learned that mature open-source labeling tools were already available, which taught me the value of thoroughly researching existing solutions before building from scratch. However, building Canvas 2D mouse event handling and coordinate systems from the ground up served as a solid foundation when later developing the IPC polygon OSD editor and TRUSafer's real-time video rendering.",
     },
     thumbnail: "/projects/label-img/thumbnail.webp",
     images: [],
