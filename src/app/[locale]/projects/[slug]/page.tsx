@@ -7,6 +7,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Reveal } from "@/components/reveal";
 import { Link } from "@/i18n/navigation";
 import { TechBadge } from "@/components/tech-badge";
+import { ImageLightbox } from "@/components/image-lightbox";
 import { routing } from "@/i18n/routing";
 import { getProjectBySlug, projects } from "@/data/projects";
 import { formatPeriod } from "@/data/types";
@@ -24,6 +25,9 @@ const COMPACT_THUMBNAIL_SLUGS = new Set([
   "m365works",
   "annual-leave",
 ]);
+
+/** Projects whose primary thumbnail is a system architecture diagram. */
+const DIAGRAM_THUMBNAIL_SLUGS = new Set(["toda", "rms"]);
 
 /**
  * Params for both dynamic segments are generated here (bottom-up), so every
@@ -114,36 +118,48 @@ export default async function ProjectDetailPage({
       </Reveal>
 
       {/*
-        Real screenshots are large enough to fill the frame (object-cover,
-        cropping overflow). The icon/logo-style thumbnails in
-        COMPACT_THUMBNAIL_SLUGS are shown contained at a capped size instead —
-        cropping a small icon to fill would zoom in awkwardly on it.
+        Real screenshots fill the frame (object-cover). Small icons in
+        COMPACT_THUMBNAIL_SLUGS are centered and contained. Architecture
+        diagrams in DIAGRAM_THUMBNAIL_SLUGS are contained on a clean background
+        and clickable for fullscreen inspection.
       */}
-      <Reveal className="relative mt-10 aspect-video overflow-hidden rounded-modal bg-primary-tint">
-        {COMPACT_THUMBNAIL_SLUGS.has(project.slug) ? (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="relative h-[200px] w-[200px]">
-              <Image
-                src={project.thumbnail}
-                alt={project.title[locale]}
-                fill
-                sizes="200px"
-                quality={90}
-                priority
-                className="object-contain"
-              />
+      <Reveal className="relative mt-10 overflow-hidden rounded-modal bg-primary-tint">
+        {DIAGRAM_THUMBNAIL_SLUGS.has(project.slug) ? (
+          <div className="border border-border bg-white p-3 dark:bg-slate-900 sm:p-5">
+            <ImageLightbox
+              src={project.thumbnail}
+              alt={project.title[locale]}
+              aspectRatio="aspect-[16/9]"
+            />
+          </div>
+        ) : COMPACT_THUMBNAIL_SLUGS.has(project.slug) ? (
+          <div className="relative aspect-video">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="relative h-[200px] w-[200px]">
+                <Image
+                  src={project.thumbnail}
+                  alt={project.title[locale]}
+                  fill
+                  sizes="200px"
+                  quality={90}
+                  priority
+                  className="object-contain"
+                />
+              </div>
             </div>
           </div>
         ) : (
-          <Image
-            src={project.thumbnail}
-            alt={project.title[locale]}
-            fill
-            sizes="(min-width: 768px) 768px, 100vw"
-            quality={85}
-            priority
-            className="object-cover"
-          />
+          <div className="relative aspect-video">
+            <Image
+              src={project.thumbnail}
+              alt={project.title[locale]}
+              fill
+              sizes="(min-width: 768px) 768px, 100vw"
+              quality={85}
+              priority
+              className="object-cover"
+            />
+          </div>
         )}
       </Reveal>
 
@@ -168,16 +184,11 @@ export default async function ProjectDetailPage({
       {/* Architecture Diagram (optional) */}
       {project.architectureImage ? (
         <DetailSection title={t("detail.architecture")}>
-          <div className="relative overflow-hidden rounded-modal border border-border bg-surface p-2 sm:p-4">
-            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg">
-              <Image
-                src={project.architectureImage}
-                alt={`${project.title[locale]} Architecture`}
-                fill
-                sizes="(min-width: 768px) 768px, 100vw"
-                className="object-contain"
-              />
-            </div>
+          <div className="overflow-hidden rounded-modal border border-border bg-white p-2 dark:bg-slate-900 sm:p-4">
+            <ImageLightbox
+              src={project.architectureImage}
+              alt={`${project.title[locale]} Architecture`}
+            />
           </div>
         </DetailSection>
       ) : null}
