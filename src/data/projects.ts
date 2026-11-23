@@ -105,8 +105,8 @@ export const projects: Project[] = [
         "Automated deployment pipeline for air-gapped Windows servers with hash verification and rollback protection",
       ],
     },
-    thumbnail: "/projects/toda/thumbnail.png",
-    architectureImage: "/projects/toda/architecture.png",
+    thumbnail: "/projects/toda/toda-architecture.png",
+    architectureImage: "/projects/toda/toda-architecture.png",
     images: [],
   },
   {
@@ -169,7 +169,7 @@ export const projects: Project[] = [
       en: "Noticing that traveling approvers unable to open PC Outlook halted email delivery, I proposed and built a mobile approval workflow via the Teams Bot API. I also introduced automated bot fault detection with admin alerts and resend capabilities. Furthermore, by profiling Nuxt build bottlenecks and eliminating redundant SSR, I slashed production build time from ~5 minutes to ~31 seconds.",
     },
     thumbnail: "/projects/m365works/thumbnail.png",
-    architectureImage: "/projects/m365works/architecture.png",
+    architectureImage: "/projects/m365works/m365works-architecture.png",
     images: [],
   },
   {
@@ -224,8 +224,8 @@ export const projects: Project[] = [
         "Background file-sharing link approval pipeline with granular staged error recovery",
       ],
     },
-    thumbnail: "/projects/rms/thumbnail.png",
-    architectureImage: "/projects/rms/architecture.png",
+    thumbnail: "/projects/rms/rms-architecture.png",
+    architectureImage: "/projects/rms/rms-architecture.png",
     images: [],
   },
   {
