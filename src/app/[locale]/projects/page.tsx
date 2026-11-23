@@ -28,11 +28,15 @@ export async function generateMetadata({
 }
 
 /**
- * Most recent first. Ongoing projects (no `end`) rank above finished ones,
- * since "still active" reads as more current than "wrapped up a while ago"
- * even if the wrap-up date is later on the calendar. Ties break on `start`.
+ * Company projects first, then toy (personal) projects.
+ * Within each category: most recent first. Ongoing projects (no `end`) rank
+ * above finished ones, since "still active" reads as more current than "wrapped
+ * up a while ago". Ties break on `start`.
  */
-function byRecency(a: Project, b: Project) {
+function byCategoryAndRecency(a: Project, b: Project) {
+  if (a.category !== b.category) {
+    return a.category === "company" ? -1 : 1;
+  }
   const aEnd = a.period.end ?? "9999-99";
   const bEnd = b.period.end ?? "9999-99";
   if (aEnd !== bEnd) return aEnd < bEnd ? 1 : -1;
@@ -51,7 +55,7 @@ export default async function ProjectsPage({
   setRequestLocale(locale);
 
   const t = await getTranslations("Projects");
-  const ordered = [...projects].sort(byRecency);
+  const ordered = [...projects].sort(byCategoryAndRecency);
 
   return (
     <div className="mx-auto w-full max-w-4xl px-6 py-16 md:px-10 md:py-24">

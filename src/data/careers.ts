@@ -21,17 +21,17 @@ export const careers: Career[] = [
     period: { start: "2024-09" },
     highlights: {
       ko: [
-        "Outlook 대용량 첨부 및 외부 공유 애드인(M365Works)을 Nuxt.js와 Django 기반으로 풀스택 개발.",
-        "PowerShell 일괄 처리(Batch)로 다중 파일 DRM 레이블 해제 시간을 4분에서 10초로 단축.",
-        "Microsoft Graph API와 Teams Bot API를 연동해 PC 없이도 처리 가능한 모바일 결재 플로우 추가 설계 및 구현.",
+        "사내 SW 프로젝트 관리 플랫폼(Toda)의 기획부터 웹 화면, 백엔드 API, MCP 서버 개발 및 사내망 배포까지 전체 기능 1인 개발.",
+        "Outlook 메일 첨부 반출 결재 애드인(M365Works)의 프론트엔드 주 담당 및 백엔드 공동 개발, PowerShell DRM 일괄 처리(4분→10초) 및 Teams 봇 모바일 결재 구현.",
+        "사내 자원관리시스템(RMS)의 인프라 권한 관리(NAS, SharePoint) 및 인사 계정 자동화 오케스트레이션 개발, 동시성 갱신 충돌을 방지하는 순차 실행 큐 도입.",
       ],
       en: [
-        "Built M365Works, an Outlook add-in for large attachments and external sharing, end to end with Nuxt.js and Django.",
-        "Cut DRM label removal for multi-file attachments from 4 minutes to 10 seconds by batching PowerShell calls.",
-        "Designed and shipped a mobile approval flow on top of Microsoft Graph API and the Teams Bot API, removing the need for a PC.",
+        "Led solo full-stack delivery of Toda, an internal project management platform, from planning to web UI, backend APIs, Claude Code MCP server, and air-gapped deployment.",
+        "Led frontend engineering and co-developed backend workflows for M365Works, an Outlook add-in for external sharing, cutting DRM removal from 4 minutes to 10 seconds via batched PowerShell and shipping Teams mobile approvals.",
+        "Engineered NAS/SharePoint permissions and HR account lifecycle orchestration in the enterprise RMS (Django/Vue 2), introducing a serialized queue to prevent concurrent update anomalies.",
       ],
     },
-    projectSlug: "m365works",
+    projectSlug: "toda",
   },
   {
     id: "aijoon",
@@ -40,7 +40,7 @@ export const careers: Career[] = [
     period: { start: "2021-09", end: "2024-08" },
     highlights: {
       ko: [
-        "CPS 관제 플랫폼 Plandy의 프론트엔드를 단독으로 맡아 Vue 3 → React 아키텍처 전환 주도 및 GS 인증 1등급 획득에 기여.",
+        "CPS 관제 플랫폼 Plandy의 프론트엔드를 단독으로 맡아 Vue 3 → React 아키텍처 전환 진행 및 GS 인증 1등급 획득에 기여.",
         "IP 카메라 임베디드 웹(IPC) 1인 풀스택 개발 및 빌드 용량 최적화(60MB → 12MB)로 기기 탑재 성공.",
         "화재 예측 관제 대시보드(TRUSafer)의 Blob 메모리 누수 해결로 24시간 상시 관제 환경 안정성 확보.",
       ],

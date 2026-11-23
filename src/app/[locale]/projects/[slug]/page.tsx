@@ -165,6 +165,23 @@ export default async function ProjectDetailPage({
         </ul>
       </DetailSection>
 
+      {/* Architecture Diagram (optional) */}
+      {project.architectureImage ? (
+        <DetailSection title={t("detail.architecture")}>
+          <div className="relative overflow-hidden rounded-modal border border-border bg-surface p-2 sm:p-4">
+            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg">
+              <Image
+                src={project.architectureImage}
+                alt={`${project.title[locale]} Architecture`}
+                fill
+                sizes="(min-width: 768px) 768px, 100vw"
+                className="object-contain"
+              />
+            </div>
+          </div>
+        </DetailSection>
+      ) : null}
+
       {/* 4. Key features & my role */}
       <DetailSection title={t("detail.features")}>
         <ul className="text-body flex list-disc flex-col gap-2 pl-5 text-muted-foreground">

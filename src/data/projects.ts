@@ -20,32 +20,32 @@ export type Project = {
   links?: { demo?: string; repo?: string };
   /** Public path, e.g. `/projects/foo/thumb.png`. */
   thumbnail: string;
+  /** Architecture diagram image public path, e.g. `/projects/foo/architecture.png`. */
+  architectureImage?: string;
   images?: string[];
 };
 
 // NOTE(content): 원본 문서 간 기간·팀 규모가 엇갈리는 항목은 아래 기준으로 판단했습니다.
 // 확인 후 교체 필요.
 //
-// ① plandy: docs/projects/projects.md 의 "CPS 기반 생산 현장 원격 모니터링 시스템"과
+// ① toda: docs/projects/Toda.md 기준 기획 시작 2026-10-20, 첫 커밋 10-21, 마지막 커밋 11-16 (약 4주).
+//    사내 SW 팀 TL로서 기획·설계·구현·테스트·배포까지 1인 개발.
+// ② m365works: docs/projects/m365works.md 기준 본인 참여 2025-10~2026-09 (11개월), 3인 팀
+//    (프론트엔드 주 담당, 백엔드 공동 개발, 2026-02 이후 단독 유지보수).
+// ③ rms: docs/projects/rms.md 기준 2024-09-27~2026-10-07 (약 2년), IT팀 기여자 3위 (커밋 271건).
+// ④ plandy: docs/projects/projects.md 의 "CPS 기반 생산 현장 원격 모니터링 시스템"과
 //    docs/projects/Plandy.md 는 기간(2021.11~2023.06)·기술·성과가 동일한 같은 프로젝트라
 //    하나로 병합했습니다. 표기명은 "Plandy"로 통일.
-// ② ipc-camera: projects.md 는 2024.02~2024.07(6개월), IPC.md 헤더는 2024.02~2024.05(4개월).
+// ⑤ ipc-camera: projects.md 는 2024.02~2024.07(6개월), IPC.md 헤더는 2024.02~2024.05(4개월).
 //    IPC.md 본문에 2024.06.04 / 2024.07.25 개발 로그가 남아 있어 2024.02~2024.07 을 채택.
-// ③ trusafer: projects.md 는 2023.11.01 시작, TRUSafer 문서는 2023.12.27 시작.
+// ⑥ trusafer: projects.md 는 2023.11.01 시작, TRUSafer 문서는 2023.12.27 시작.
 //    "한 달의 시간만 주어졌다"는 서술과 일치하는 12월을 시작으로 잡고, 종료는 마지막
 //    개발 로그(2024.06.21)를 반영해 2023.12~2024.06 으로 표기했습니다.
-//    팀 규모도 헤더(FE 2 / BE 2)와 본문(FE 1 + BE 2)이 달라, 더 구체적인 본문 기준 3명.
-// ④ survey: 초기 구축은 2023.01~2023.03 이지만 2024.04 재의뢰로 연도별 버전을 추가
+// ⑦ survey: 초기 구축은 2023.01~2023.03 이지만 2024.04 재의뢰로 연도별 버전을 추가
 //    개발(~2024.07.25)했기에 기간을 2023.01~2024.07 로 합쳤습니다.
-// ⑤ m365works: 전용 상세 문서가 없어 projects.md 서술과 careers.ts highlights 를 근거로
-//    작성했습니다. 기간(2025.09~2026.02)은 projects.md 표기 그대로이며, 팀 규모는 명시가
-//    없어 "역할: 풀스택 개발" 서술에 따라 1인으로 두었습니다.
-// ⑥ make-pro: 실제 저장소(C:\Users\airwa\OneDrive\Desktop\code\make_pro)의 git 로그를
+// ⑧ make-pro: 실제 저장소(C:\Users\airwa\OneDrive\Desktop\code\make_pro)의 git 로그를
 //    확인해 2026.06.14 첫 커밋 ~ 2026.07.02 마지막 커밋(README 작성)으로 교체했습니다.
-// ⑦ links: 공개 데모/저장소가 확인되는 프로젝트가 없어 전부 생략했습니다.
-//    make-pro/tutoring-notice 는 실제 GitHub 저장소(비공개 추정)를 확인했지만, 공개
-//    링크로 걸어도 되는지 확인 전이라 우선 생략.
-// ⑧ tutoring-notice: 실제 저장소(...\code\poo-study-notes)의 git 로그·package.json·
+// ⑨ tutoring-notice: 실제 저장소(...\code\poo-study-notes)의 git 로그·package.json·
 //    docker-compose.yaml을 확인해 기간을 2023.11(첫 커밋) 시작으로, 스택을 실제 구성
 //    (React+Recoil+TanStack Query 클라이언트, 초기 Express·Sequelize에서 NestJS·TypeORM
 //    으로 재작성된 서버, MariaDB, Nginx)으로 교체했습니다.
@@ -56,57 +56,176 @@ export type Project = {
  */
 export const projects: Project[] = [
   {
+    slug: "toda",
+    title: {
+      ko: "Toda",
+      en: "Toda",
+    },
+    category: "company",
+    period: { start: "2026-10", end: "2026-11" },
+    teamSize: 1,
+    stack: [
+      "NestJS",
+      "TypeScript",
+      "TypeORM",
+      "MariaDB",
+      "React",
+      "Vite",
+      "Tailwind CSS",
+      "Model Context Protocol",
+      "Claude Code",
+      "Jest",
+      "Vitest",
+    ],
+    summary: {
+      ko: "3개의 독립적인 사내 SW 프로젝트 간 협업 비효율과 버전 호환성 관리 문제를 해결하기 위해, 기획부터 오프라인 사내망 배포 및 운영까지 4주 만에 1인 개발한 사내 프로젝트 관리 플랫폼입니다. 팀원은 각자의 Claude Code에서 MCP(Model Context Protocol) 툴로 업무 항목과 프로젝트 간 요청(Request)을 자연어로 관리하고, 웹 대시보드로 실시간 진척도와 Timeline, Team 일정을 확인합니다.",
+      en: "An internal project management platform designed, built, and deployed to an air-gapped corporate network in 4 weeks as a solo project lead, solving inter-project handoff friction and version compatibility tracking across three interdependent software initiatives. Engineers manage tasks and inter-project requests via 28 Model Context Protocol (MCP) tools inside Claude Code, while tracking timelines and team capacity through a web console.",
+    },
+    myRole: {
+      ko: "기획부터 React 웹 화면, NestJS 백엔드 API, Claude Code 연동용 MCP 서버 개발과 사내망 배포까지 전체 기능을 혼자 구현했습니다.",
+      en: "Sole developer responsible for the entire implementation, from planning and React web frontend to NestJS backend APIs, Claude Code MCP server, and internal network deployment.",
+    },
+    features: {
+      ko: [
+        "프로젝트 간 협업 요청(Request) 6단계 상태 머신 및 수락 시 하위 Task 생성 및 해결 원자적 트랜잭션",
+        "웹 REST API와 동일한 도메인 서비스를 공유하는 28개 툴의 무상태 MCP 서버 (Claude Code 연동)",
+        "사람이 작성한 본문과 AI가 작성한 본문(AI 칸)의 데이터 및 수정 권한 분리",
+        "Timeline 간트 뷰, Team 주간 뷰, DB 트리거와 SHA-256 체크섬 기반 불변(Immutable) 주간 기록",
+        "업무 번호 체계의 프로젝트별 순번 → 전역 번호 무중단 데이터베이스 마이그레이션",
+        "단위 및 HTTP 통합 테스트 4,781개 구축 (NestJS 서비스 계층 커버리지 99.9%)",
+        "인터넷 연결이 없는 사내 Windows 서버를 위한 해시 검증 및 자동 롤백 배포 파이프라인",
+      ],
+      en: [
+        "Inter-project request workflow with a 6-state machine, atomically generating tasks upon acceptance",
+        "Stateless MCP server providing 28 tools that share the business service layer with REST APIs",
+        "Strict database and authorization separation between human and AI-authored fields",
+        "Timeline Gantt charts, weekly team views, and tamper-evident weekly snapshots sealed with SHA-256 checksums",
+        "Zero-downtime database migration transitioning issue keys from project-scoped to global sequences",
+        "4,781 unit and HTTP integration tests maintaining 99.9% service branch coverage",
+        "Automated deployment pipeline for air-gapped Windows servers with hash verification and rollback protection",
+      ],
+    },
+    thumbnail: "/projects/toda/thumbnail.png",
+    architectureImage: "/projects/toda/architecture.png",
+    images: [],
+  },
+  {
     slug: "m365works",
     title: {
       ko: "M365Works",
       en: "M365Works",
     },
     category: "company",
-    period: { start: "2025-09", end: "2026-02" },
+    period: { start: "2025-10", end: "2026-09" },
     teamSize: 3,
     stack: [
       "Nuxt.js",
       "Vue.js",
+      "TypeScript",
+      "Tailwind CSS",
       "Django",
       "Office.js",
       "Microsoft Graph API",
       "Teams Bot API",
       "PowerShell",
+      "Synology NAS",
     ],
     summary: {
-      ko: "메일 첨부 용량 제한(20MB)과 민감도 레이블(DRM) 해제 결재를 Outlook 안에서 한 번에 처리할 수 있도록 개발한 사내 전용 애드인입니다. 기존에 직원들이 별도 웹 페이지를 오가며 처리하던 번거로운 과정을 통합했으며, 도입 후 기존 레거시 웹 서비스 사용률을 10% 수준으로 낮추고 대부분의 업무를 애드인으로 전환했습니다.",
-      en: "An in-house Outlook add-in that streamlines large attachments and DRM sensitivity label approvals directly within the mail client. It replaced the legacy web portal employees previously had to navigate around the 20MB attachment limit, reducing legacy portal usage to 10% as staff adopted the add-in.",
+      ko: "Outlook에서 첨부파일이 든 외부 메일 발송 시 OnMessageSend 이벤트로 가로채 다단계 결재를 거치게 하고, 최종 승인 시 서버가 Purview 민감도 레이블(DRM)을 해제하고 사내 NAS에 업로드한 뒤 본문 링크를 보안 공유 링크로 치환해 기안자 명의로 자동 발송하는 반출 결재 시스템입니다. 별도 포털에 접속해야 했던 기존의 번거로운 결재 절차를 Outlook 작업창 하나로 통합했습니다.",
+      en: "An Outlook add-in outbound approval platform that intercepts outbound emails containing large attachments via the OnMessageSend event, enforces multi-tier sign-offs, automatically strips Purview DRM labels, stores files on Synology NAS, and swaps body links for secure time-limited links before dispatching via Microsoft Graph API on behalf of the sender.",
     },
     myRole: {
-      ko: "Nuxt.js 기반 프론트엔드와 Django 백엔드, 배포까지 풀스택으로 개발했습니다. 기획 단계에서 고려되지 않았던 외근 및 출장자의 결재 지연 문제를 찾아내고, Teams Bot API를 활용한 모바일 원격 결재 플로우를 제안하여 구현했습니다.",
-      en: "Owned the whole stack from the Nuxt.js frontend to the Django backend and deployment. I identified an approval bottleneck for managers away from their desks and designed and shipped a mobile approval flow via the Teams Bot API.",
+      ko: "3인 팀에서 프론트엔드 개발을 주로 맡아 Outlook 보내기 이벤트 핸들러(순수 Vanilla JS), 작업창(Nuxt 4 + Vue 3), 관리 콘솔 및 결재 추적 화면을 구축했으며, 백엔드에서는 결재 요청 처리 파이프라인, Teams 봇 연동, DRM 일괄 해제 최적화, 비동기 스레드 풀(16개) 처리를 공동 개발했습니다. 2026년 2월 이후에는 단독으로 운영 이슈 해결 및 기능 고도화를 진행했습니다.",
+      en: "Primary frontend engineer in a 3-person team, implementing the pure Vanilla JS Outlook OnMessageSend event handler, the Nuxt 4 + Vue 3 Taskpane, and the web admin console. Co-engineered backend approval state workflows, Teams Bot API integration, batched DRM removal, and a 16-worker thread pool. Led solo maintenance and operational enhancements from February 2026 onward.",
     },
     features: {
       ko: [
-        "Outlook taskpane에서 20MB 초과 첨부 파일을 업로드하면 자동으로 링크로 변환",
-        "결재가 승인되면 민감도 레이블(DRM)을 자동 해제하고 Graph API로 메일 발송",
-        "PowerShell 일괄 처리 기반 다중 파일 레이블 해제",
-        "Microsoft Graph API 연동 사내 계정 및 메일 처리",
-        "Teams Bot API 기반 모바일 결재 플로우",
+        "Outlook OnMessageSend 이벤트로 외부 메일 발송을 가로채 다단계 반출 결재로 전환하는 순수 JS 핸들러",
+        "작업창(Nuxt 4)과 이벤트 핸들러 간 메모리 격리를 극복하기 위한 사용자 지정 속성(Custom Property) 상태 연동",
+        "최대 50개(1GB) 대용량 첨부파일 업로드 및 결재선 지정, 본문 임시 링크 자동 삽입",
+        "PowerShell 일괄 처리 기반 다중 파일 Purview 민감도 레이블(DRM) 해제 최적화",
+        "메일 저장소 간 본문 동기화 지연을 감지하는 링크별 고유 토큰 검증 시스템",
+        "Microsoft Graph API 연동 사내 계정 및 기안자 대리 메일 발송",
+        "Teams Bot API 기반 모바일 결재 요청, 승인, 반려 플로우 및 봇 장애 감지 알림 체계",
+        "SSR 제거 및 클라이언트 렌더링 전환으로 프론트엔드 빌드 시간 최적화 (5분 → 31초)",
       ],
       en: [
-        "Uploading an attachment over 20MB in the Outlook taskpane converts it into a link automatically",
-        "On approval, the sensitivity label (DRM) is removed automatically and the mail is sent via Graph API",
-        "Batched PowerShell processing for multi-file label removal",
-        "Account and mail handling via Microsoft Graph API",
-        "Mobile approval flow built on the Teams Bot API",
+        "Pure JavaScript OnMessageSend event handler intercepting outbound mail to enforce multi-tier approval workflows",
+        "Custom Property state bridging across isolated taskpane and event handler runtimes",
+        "Multi-file upload (up to 50 files / 1GB), routing chain configuration, and body link insertion in Nuxt 4",
+        "Batched PowerShell processing reducing DRM sensitivity label stripping to 2 execution runs",
+        "Per-link unique token validation guarding against premature dispatch caused by Graph mailbox sync delays",
+        "Sender impersonation and mail dispatch through the Microsoft Graph API",
+        "Teams Bot API integration for mobile approval notifications, action processing, and fault reporting",
+        "Frontend build time reduction from ~5 minutes to ~31 seconds by disabling redundant SSR",
       ],
     },
     challenges: {
-      ko: "결재 승인 시 백엔드에서 파일마다 개별 PowerShell 프로세스를 띄워 DRM 레이블을 해제하고 Graph API로 메일을 발송하는 구조였는데, 첨부 파일이 50개에 달할 경우 처리 시간이 4~5분까지 늘어나 승인 후 메일 발송이 지연되는 문제가 있었습니다. 잦은 프로세스 생성 오버헤드가 원인임을 파악하고, 실제 레이블이 적용된 파일만 선별한 뒤 파일 경로 목록을 배열로 넘겨 1회의 PowerShell 명령으로 일괄 처리(Batch Processing)하도록 개선했습니다. 이를 통해 50개 파일 기준 처리 시간을 10초대로 대폭 단축하여 승인 즉시 메일이 발송되도록 최적화했습니다.",
-      en: "When an approval was granted, spawning an individual PowerShell process per attached file to strip DRM labels took 4–5 minutes for 50 files, causing noticeable delivery delays. Identifying process creation overhead as the bottleneck, I filtered down to files that actually carried labels and passed their paths in a single array to run as one batched PowerShell command. This cut processing time for 50 files down to ~10 seconds, enabling near-instant delivery after approval.",
+      ko: "결재 승인 시 파일마다 개별 PowerShell 프로세스를 띄워 DRM 레이블을 해제하던 구조에서는 파일 50개 기준 처리 시간이 4~5분까지 늘어나 발송이 지연되는 문제가 있었습니다. 프로세스 생성 오버헤드가 원인임을 확인하고, 실제 레이블이 걸린 파일만 선별한 뒤 경로 배열을 넘겨 단 2회의 PowerShell 호출로 일괄 처리(Batch Processing)하도록 개선하여 10초대로 단축했습니다. 또한 빠른 발송 시 Exchange 사서함 동기화 지연으로 링크가 빠진 이전 본문이 발송되는 문제를 링크별 고유 검증 토큰을 심어 백엔드가 Graph API로 동기화를 확인한 후 발송하도록 설계해 본문 무결성을 확보했습니다.",
+      en: "Spawning individual PowerShell processes per file to strip Purview DRM labels took 4–5 minutes for 50 files due to process startup overhead. I resolved this by filtering for files genuinely bearing labels and passing them as an array, cutting executions to just 2 batched runs and shrinking processing time to ~10 seconds. In addition, rapid dispatch caused stale bodies without links to be mailed due to asynchronous Exchange synchronization delays; I resolved this by embedding unique verification tokens in each link and requiring backend Graph API polling to confirm token presence before authorizing final delivery.",
     },
     improvements: {
-      ko: "결재권자가 외근이나 출장 중일 때 사내 PC의 Outlook에 접속할 수 없어 결재가 보류되고 메일 발송 전체가 멈추는 병목 현상을 발견했습니다. 기획서에는 없던 시나리오였지만, 모바일 Teams 환경에서 즉시 결재를 처리할 수 있도록 Teams Bot API 연동 원격 승인 플로우를 선제적으로 제안하고 구축했습니다. 기능 구현에 앞서 사용자의 실제 업무 동선과 예외 상황을 먼저 검토하는 시각을 다질 수 있었습니다.",
-      en: "I noticed an operational bottleneck where approvers away from their desks could not access PC Outlook, stalling both approvals and email delivery. Even though it was not in the original spec, I proactively proposed and built a remote approval flow using the Teams Bot API so managers could review requests directly from mobile devices. This reinforced the importance of thoroughly analyzing real user workflows and edge cases before diving into implementation.",
+      ko: "외근이나 출장 중인 결재권자가 PC Outlook에 접속하지 못해 결재가 보류되고 메일 발송이 멈추는 병목 현상을 발견하고, 모바일 Teams 환경에서 바로 결재할 수 있도록 Teams Bot API 연동 원격 승인 플로우를 제안하여 구축했습니다. 아울러 봇 서버 장애를 유형별로 감지해 관리자에게 알리고 결재 요청을 재발송하는 복구 기능을 마련했으며, Nuxt 빌드 병목을 프로파일링하여 SSR을 제거하고 클라이언트 렌더링으로 전환함으로써 빌드 시간을 5분에서 31초로 90% 단축시켰습니다.",
+      en: "Noticing that traveling approvers unable to open PC Outlook halted email delivery, I proposed and built a mobile approval workflow via the Teams Bot API. I also introduced automated bot fault detection with admin alerts and resend capabilities. Furthermore, by profiling Nuxt build bottlenecks and eliminating redundant SSR, I slashed production build time from ~5 minutes to ~31 seconds.",
     },
-    // Internal company project, so there is no public demo or repository.
     thumbnail: "/projects/m365works/thumbnail.png",
+    architectureImage: "/projects/m365works/architecture.png",
+    images: [],
+  },
+  {
+    slug: "rms",
+    title: {
+      ko: "RMS",
+      en: "RMS",
+    },
+    category: "company",
+    period: { start: "2024-09", end: "2026-10" },
+    teamSize: 4,
+    stack: [
+      "Python",
+      "Django",
+      "Vue.js",
+      "Bootstrap",
+      "MariaDB",
+      "MySQL",
+      "APScheduler",
+      "Active Directory",
+      "Microsoft 365",
+      "Prometheus",
+      "Chart.js",
+      "ApexCharts",
+      "JWT",
+    ],
+    summary: {
+      ko: "사내 임직원 전체가 사용하는 포털형 자원관리시스템(RMS)으로, 약 28개 Django 앱으로 구성된 모놀리식 환경에서 인프라 권한 신청 및 승인, 인사 계정 자동화, 실시간 모니터링 대시보드 등을 설계하고 개발했습니다. 입사, 부서이동, 퇴사 등 인사 이벤트에 따라 AD, M365, ETX, NAS 공유폴더를 순차 반영하는 오케스트레이션을 구축하고, 외부 시스템 동시 갱신 충돌을 막기 위한 순차 실행 큐를 도입했습니다.",
+      en: "An enterprise Resource Management System (RMS) portal serving all company employees, built as a monolithic Django platform spanning ~28 apps. I led the end-to-end design and implementation of infrastructure permission workflows, HR-driven account lifecycle orchestration, and real-time infrastructure monitoring dashboards. I also designed a serialized execution queue to eliminate concurrent update anomalies across Active Directory, Microsoft 365, and NAS storage systems.",
+    },
+    myRole: {
+      ko: "4인 팀의 풀스택 개발자로 참여해 사내 인프라 관리와 계정 자동화 시스템을 개발했습니다. 직원의 입사, 부서 이동, 퇴사에 맞춰 Active Directory와 M365(Microsoft 365) 계정 생성 및 권한을 자동으로 처리하는 시스템을 구축하고, NAS 공유폴더와 SharePoint 사이트 권한을 신청하고 승인하는 웹 서비스를 직접 설계하고 개발했습니다. 또한 Prometheus와 NAS API를 연동해 서버와 스토리지 상태를 실시간으로 확인하는 모니터링 대시보드 화면을 구축했습니다.",
+      en: "Full-stack developer in a 4-person team, responsible for internal infrastructure workflows and account lifecycle automation. Built orchestration systems that automatically handle Active Directory and M365 (Microsoft 365) account provisioning and permission updates for employee onboarding, department transfers, and offboarding. Independently designed and developed web approval workflows for NAS shared folder and SharePoint site permissions, and created real-time server and storage monitoring dashboards by integrating Prometheus and NAS APIs.",
+    },
+    features: {
+      ko: [
+        "빌드 도구 없는 Django 템플릿 환경에서 Vue 2.7 컴포넌트화 아키텍처 수립 및 전역 로딩/에러 처리 일원화",
+        "NAS 공유폴더 및 SharePoint 사이트 권한 신청 및 승인 워크플로와 Active Directory / M365 그룹 자동 연동",
+        "입사, 부서이동, 퇴사 시 AD, M365, ETX, 공유폴더, 메일 참조 규칙을 순차 반영하는 계정 오케스트레이션",
+        "동시 계정 갱신 시 발생하는 Lost Update를 방지하는 메모리 기반 순차 실행 큐(단일 워커 큐) 구현",
+        "Prometheus(PromQL) 및 Synology NAS API 연동 서버와 스토리지 성능 및 용량 실시간 모니터링 대시보드",
+        "사내 에이전트 간 비대칭키 상호 인증을 위한 RSA 2048 기반 자체 JWT 발급 및 키 교체 서비스",
+        "외부 파일 공유(파일링크) 승인 워크플로 및 백그라운드 파이프라인 단계별 오류 복구 모델",
+      ],
+      en: [
+        "Architected componentized Vue 2.7 patterns inside a bundler-free Django template system with unified loading and error handling",
+        "NAS shared folder and SharePoint permissions approval workflows integrated with Active Directory and M365 groups",
+        "Lifecycle orchestration updating AD, M365, ETX, shared folders, and email CC rules upon onboarding, transfer, or offboarding",
+        "In-memory serialized execution queue (single-worker queue) preventing lost updates during concurrent account modifications",
+        "Real-time server and storage performance dashboards pulling metrics from Prometheus (PromQL) and Synology NAS APIs",
+        "Asymmetric JWT issuance and rotation service utilizing RSA-2048 keys for authenticating internal network agents",
+        "Background file-sharing link approval pipeline with granular staged error recovery",
+      ],
+    },
+    thumbnail: "/projects/rms/thumbnail.png",
+    architectureImage: "/projects/rms/architecture.png",
     images: [],
   },
   {
@@ -185,7 +304,7 @@ export const projects: Project[] = [
       "Notification API",
     ],
     summary: {
-      ko: "열화상 센서로 수집된 온도를 실시간으로 모니터링하여 화재 징후를 감지하는 24시간 관제 대시보드입니다. 현장당 최대 200여 대의 센서 데이터를 처리하며, 구역별로 설정한 주의 및 위험 온도를 넘어가면 화면에 경고를 띄우고 브라우저 알림으로 즉시 상황을 알립니다.",
+      ko: "열화상 센서로 수집된 온도를 실시간으로 모니터링하여 화재 징후를 감지하는 24시간 관제 대시보드입니다. 현장당 최대 200여 대의 센서 데이터를 처리하며, 구역별로 설정한 주의 및 위험 온도를 넘어가면 화면에 경고를 띄우고 브라우저 알림으로 바로 상황을 알립니다.",
       en: "A 24/7 industrial fire monitoring dashboard that tracks temperatures from thermal sensors in real time to detect fire risks early. It processes streams from up to ~200 sensors per site and displays on-screen warnings with browser notifications whenever a zone exceeds preset caution or danger thresholds.",
     },
     myRole: {

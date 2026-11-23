@@ -55,6 +55,7 @@
       "category": "구분",
       "overview": "프로젝트 개요",
       "stack": "기술 스택",
+      "architecture": "시스템 아키텍처",
       "myRole": "나의 역할",
       "features": "핵심 기능",
       "challenges": "어려웠던 점",

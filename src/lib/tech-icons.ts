@@ -1,8 +1,9 @@
 import type { IconType } from "react-icons";
 import { FaAws, FaMicrosoft, FaSlack } from "react-icons/fa6";
-import { LuBell, LuCode, LuDatabase, LuNetwork, LuPenTool, LuPlug } from "react-icons/lu";
+import { LuBell, LuBot, LuCode, LuDatabase, LuNetwork, LuPenTool, LuPlug, LuTerminal } from "react-icons/lu";
 import {
   SiAntdesign,
+  SiAnthropic,
   SiApache,
   SiApachekafka,
   SiArduino,
@@ -11,6 +12,7 @@ import {
   SiBootstrap,
   SiC,
   SiChartdotjs,
+  SiClaude,
   SiConfluence,
   SiCplusplus,
   SiCss,
@@ -86,6 +88,7 @@ import {
   SiTerraform,
   SiThreedotjs,
   SiTurborepo,
+  SiTypeorm,
   SiTypescript,
   SiUbuntu,
   SiVercel,
@@ -159,6 +162,7 @@ const TECH_ICONS: Record<string, IconType> = {
   nodejs: SiNodedotjs,
   express: SiExpress,
   nestjs: SiNestjs,
+  typeorm: SiTypeorm,
   spring: SiSpring,
   springboot: SiSpringboot,
   django: SiDjango,
@@ -236,6 +240,15 @@ const TECH_ICONS: Record<string, IconType> = {
   teamsbotapi: FaMicrosoft,
   msteams: FaMicrosoft,
   officejs: FaMicrosoft,
+  activedirectory: FaMicrosoft,
+  powershell: LuTerminal,
+
+  // ── AI & Agents ──────────────────────────────────────────
+  claude: SiClaude,
+  claudecode: SiClaude,
+  anthropic: SiAnthropic,
+  modelcontextprotocol: LuBot,
+  mcp: LuBot,
 
   // ── Generic fallbacks for things with no brand mark ───────
   restapi: SiSwagger,
@@ -327,6 +340,7 @@ const TECH_COLORS: Record<string, string> = {
   nodejs: "#5fa04e",
   express: "#0a0a0a",
   nestjs: "#e0234e",
+  typeorm: "#fe0803",
   spring: "#6db33f",
   springboot: "#6db33f",
   django: "#092e20",
@@ -397,6 +411,11 @@ const TECH_COLORS: Record<string, string> = {
   figma: "#f24e1e",
   figmaapi: "#f24e1e",
   slack: "#4a154b",
+  claude: "#d97706",
+  claudecode: "#d97706",
+  anthropic: "#cc785c",
+  powershell: "#5391fe",
+  activedirectory: "#00a4ef",
   discord: "#5865f2",
 
   // `restapi` / `rest` render the Swagger mark, so they take the Swagger green.
